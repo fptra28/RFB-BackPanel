@@ -3,6 +3,12 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ForbiddenHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServerErrorHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,6 +56,31 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // Menangani error 400 (Bad Request)
+        if ($exception instanceof BadRequestHttpException) {
+            return response()->view('errors.400', [], 400);
+        }
+
+        // Menangani error 403 (Forbidden)
+        if ($exception instanceof ForbiddenHttpException) {
+            return response()->view('errors.403', [], 403);
+        }
+
+        // Menangani error 404 (Not Found)
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->view('errors.404', [], 404);
+        }
+
+        // Menangani error 419 (Page Expired)
+        if ($exception instanceof TokenMismatchException) {
+            return response()->view('errors.419', [], 419);
+        }
+
+        // Menangani error 500 (Internal Server Error)
+        if ($exception instanceof HttpException && $exception->getStatusCode() == 500) {
+            return response()->view('errors.500', [], 500);
+        }
+
         return parent::render($request, $exception);
     }
 }

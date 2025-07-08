@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\BeritaController;
+use App\Http\Controllers\Api\JfxController;
+use App\Http\Controllers\Api\SpaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/berita', [BeritaController::class, 'index']);
+Route::get('/berita/{slug}', [BeritaController::class, 'show']);
+
+Route::get('/jfx', [JfxController::class, 'index']);
+Route::get('/jfx/{slug}', [JfxController::class, 'show']);
+
+Route::get('/spa', [SpaController::class, 'index']);
+Route::get('/spa/{slug}', [SpaController::class, 'show']);
