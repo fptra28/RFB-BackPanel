@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\JfxController;
+use App\Http\Controllers\Api\KategoriWakilPialangController;
 use App\Http\Controllers\Api\SpaController;
+use App\Http\Controllers\Api\WakilPialangController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +31,7 @@ Route::get('/jfx/{slug}', [JfxController::class, 'show']);
 
 Route::get('/spa', [SpaController::class, 'index']);
 Route::get('/spa/{slug}', [SpaController::class, 'show']);
+
+Route::get('/kategori-wakil-pialang', [KategoriWakilPialangController::class, 'index']);
+
+Route::get('/wakil-pialang', [WakilPialangController::class, 'index']);
