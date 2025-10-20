@@ -90,6 +90,12 @@ Route::prefix('website')->name('profileWeb.')->group(function () {
 // Banner
 Route::prefix('banner')->name('banner.')->group(function () {
     Route::get('/', [BannerController::class, 'index'])->name('index');
+    Route::get('/create', [BannerController::class, 'create'])->name('create');
+    Route::post('/', [BannerController::class, 'store'])->name('store');
+    Route::get('/{id}', [BannerController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [BannerController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [BannerController::class, 'update'])->name('update');
+    Route::delete('/{id}', [BannerController::class, 'destroy'])->name('destroy');
 });
 
 

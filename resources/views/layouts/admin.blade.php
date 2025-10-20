@@ -106,12 +106,12 @@
             </div>
 
             <!-- Nav Item - Profile -->
-            <li class="nav-item {{ Nav::isRoute('profileWeb.*') }}">
+            <!-- <li class="nav-item {{ Nav::isRoute('profileWeb.*') }}">
                 <a class="nav-link" href="{{route('profileWeb.index')}}">
                     <i class="fas fa-fw fa-user"></i>
                     <span>{{ __('Profile') }}</span>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Nav Item - About -->
             <li class="nav-item {{ Nav::isRoute('kategori-wakil.*') }}">
@@ -130,38 +130,38 @@
             </li>
 
             <!-- Nav Item - About -->
-            <li class="nav-item {{ Nav::isRoute('galeri.*') }}">
+            <!-- <li class="nav-item {{ Nav::isRoute('galeri.*') }}">
                 <a class="nav-link" href="">
                     <i class="fa-solid fa-image"></i>
                     <span>{{ __('Galeri') }}</span>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Nav Item - About -->
-            <li class="nav-item {{ Nav::isRoute('file.*') }}">
+            <!-- <li class="nav-item {{ Nav::isRoute('file.*') }}">
                 <a class="nav-link" href="">
                     <i class="fa-solid fa-file"></i>
                     <span>{{ __('File Unduhan') }}</span>
                 </a>
-            </li>
+            </li> -->
 
             <hr class="sidebar-divider">
 
             <!-- Heading -->
-            <div class="sidebar-heading">
+            <!-- <div class="sidebar-heading">
                 {{ __('Manajemen Pengguna') }}
-            </div>
+            </div> -->
 
             <!-- Nav Item - Profile -->
-            <li class="nav-item {{ Nav::isRoute('user.*') }}">
+            <!-- <li class="nav-item {{ Nav::isRoute('user.*') }}">
                 <a class="nav-link" href="">
                     <i class="fas fa-fw fa-user"></i>
                     <span>{{ __('User') }}</span>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+            <!-- <hr class="sidebar-divider d-none d-md-block"> -->
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
