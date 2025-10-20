@@ -82,18 +82,19 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="urutan">Urutan <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control @error('urutan') is-invalid @enderror" 
-                                       id="urutan" name="urutan" 
-                                       value="{{ old('urutan', 0) }}" 
-                                       min="0" 
+                                <label for="order">Urutan <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control @error('order') is-invalid @enderror" 
+                                       id="order" name="order" 
+                                       value="{{ old('order', $defaultOrder) }}" 
+                                       min="1" 
+                                       max="{{ $totalBanners + 1 }}"
                                        required>
-                                @error('urutan')
+                                @error('order')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                                <small class="form-text text-muted">Angka lebih kecil akan muncul lebih dulu</small>
+                                <small class="form-text text-muted">Urutan yang valid: 1 sampai {{ $totalBanners + 1 }}</small>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="is_active">Status</label>
