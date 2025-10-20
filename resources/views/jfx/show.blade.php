@@ -35,7 +35,7 @@
         <div class="d-flex justify-content-center align-items-center flex-column mb-3">
             <!-- Menampilkan gambar produk dengan kelas img-fluid untuk membuatnya responsif -->
             <h4 class="mt-3 font-weight-bold">{{ $produk->name }}</h4>
-            <img src="{{ asset('img/produk/jfx/'.$produk->image) }}" alt="{{ $produk->name }}" class="img-fluid rounded"
+            <img src="{{ asset('img/produk/'.$produk->image) }}" alt="{{ $produk->name }}" class="img-fluid rounded"
                 style="max-width: 500px; width: 100%; height: auto;" loading="lazy">
         </div>
         <div>
