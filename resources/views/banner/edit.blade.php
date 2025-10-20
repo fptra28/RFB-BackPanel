@@ -39,11 +39,11 @@
                         @method('PUT')
                         
                         <div class="form-group">
-                            <label for="judul">Judul Banner</label>
-                            <input type="text" class="form-control @error('judul') is-invalid @enderror" 
-                                   id="judul" name="judul" 
-                                   value="{{ old('judul', $banner->judul) }}" required>
-                            @error('judul')
+                            <label for="title">Judul Banner</label>
+                            <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                                   id="title" name="title" 
+                                   value="{{ old('title', $banner->title) }}" required>
+                            @error('title')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -51,24 +51,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="deskripsi">Deskripsi</label>
-                            <textarea class="form-control @error('deskripsi') is-invalid @enderror" 
-                                      id="deskripsi" name="deskripsi" 
-                                      rows="3">{{ old('deskripsi', $banner->deskripsi) }}</textarea>
-                            @error('deskripsi')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="url">URL Tautan (Opsional)</label>
-                            <input type="url" class="form-control @error('url') is-invalid @enderror" 
-                                   id="url" name="url" 
-                                   placeholder="https://example.com"
-                                   value="{{ old('url', $banner->url) }}">
-                            @error('url')
+                            <label for="description">Deskripsi</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" 
+                                      id="description" name="description" 
+                                      rows="3" required>{{ old('description', $banner->description) }}</textarea>
+                            @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -93,7 +80,7 @@
                             <div class="mt-2">
                                 @if($banner->image)
                                     <img id="image-preview" 
-                                         src="{{ asset('img/banners/' . $banner->image) }}" 
+                                         src="{{ asset('storage/' . $banner->image) }}" 
                                          alt="Preview Gambar" 
                                          style="max-width: 100%; max-height: 200px; margin-top: 10px;">
                                 @else
@@ -105,12 +92,26 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="status">Status</label>
-                                <select class="form-control @error('status') is-invalid @enderror" id="status" name="status">
-                                    <option value="active" {{ old('status', $banner->status) === 'active' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="inactive" {{ old('status', $banner->status) === 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                                <label for="order">Urutan</label>
+                                <input type="number" class="form-control @error('order') is-invalid @enderror" 
+                                       id="order" name="order" 
+                                       value="{{ old('order', $banner->order) }}" 
+                                       min="1" 
+                                       max="{{ $totalBanners }}"
+                                       required>
+                                @error('order')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="is_active">Status</label>
+                                <select class="form-control @error('is_active') is-invalid @enderror" id="is_active" name="is_active">
+                                    <option value="1" {{ old('is_active', $banner->is_active) == 1 ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ old('is_active', $banner->is_active) == 0 ? 'selected' : '' }}>Nonaktif</option>
                                 </select>
-                                @error('status')
+                                @error('is_active')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

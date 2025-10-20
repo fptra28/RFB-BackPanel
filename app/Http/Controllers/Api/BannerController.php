@@ -18,11 +18,7 @@ class BannerController extends Controller
     {
         $banners = Banner::orderBy('order', 'asc')->get();
         
-        return response()->json([
-            'success' => true,
-            'data' => $banners,
-            'message' => 'Daftar banner berhasil diambil'
-        ]);
+        return response()->json($banners);
     }
 
     /**

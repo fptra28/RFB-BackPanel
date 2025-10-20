@@ -113,7 +113,7 @@ class BannerController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'order' => 'nullable|integer|min:1',
             'is_active' => 'required|boolean',
         ]);
