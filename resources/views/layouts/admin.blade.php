@@ -130,12 +130,12 @@
             </li>
 
             <!-- Nav Item - About -->
-            <!-- <li class="nav-item {{ Nav::isRoute('galeri.*') }}">
-                <a class="nav-link" href="">
-                    <i class="fa-solid fa-image"></i>
-                    <span>{{ __('Galeri') }}</span>
+            <li class="nav-item {{ Nav::isRoute('karier.*') }}">
+                <a class="nav-link" href="{{route('karier.index')}}">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>{{ __('Karier') }}</span>
                 </a>
-            </li> -->
+            </li>
 
             <!-- Nav Item - About -->
             <!-- <li class="nav-item {{ Nav::isRoute('file.*') }}">
@@ -294,6 +294,9 @@
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Stack for scripts from views -->
+    @stack('scripts')
 </body>
 
 </html>

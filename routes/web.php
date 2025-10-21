@@ -9,6 +9,7 @@ use App\Http\Controllers\SpaController;
 use App\Http\Controllers\WakilPialangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KarierController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -87,7 +88,11 @@ Route::prefix('website')->name('profileWeb.')->group(function () {
     Route::delete('/delete/{id}', [ProfileWebsiteController::class, 'destroy'])->name('destroy');
 });
 
-// Banner
+// Rute untuk Karier
+Route::resource('karier', KarierController::class)->except(['show']);
+Route::get('karier/{karier:slug}', [KarierController::class, 'show'])->name('karier.show');
+
+// Rute untuk Banner
 Route::prefix('banner')->name('banner.')->group(function () {
     Route::get('/', [BannerController::class, 'index'])->name('index');
     Route::get('/create', [BannerController::class, 'create'])->name('create');

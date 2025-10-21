@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\JfxController;
 use App\Http\Controllers\Api\KategoriWakilPialangController;
 use App\Http\Controllers\Api\SpaController;
 use App\Http\Controllers\Api\WakilPialangController;
+use App\Http\Controllers\API\KarierController as ApiKarierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +21,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+// API Routes for Karier
+Route::prefix('karier')->group(function () {
+    Route::get('/', [ApiKarierController::class, 'index']);
+    Route::get('/slug/{slug}', [ApiKarierController::class, 'showBySlug']);
+    Route::post('/', [ApiKarierController::class, 'store']);
+    Route::get('/{id}', [ApiKarierController::class, 'show']);
+    Route::put('/{id}', [ApiKarierController::class, 'update']);
+    Route::delete('/{id}', [ApiKarierController::class, 'destroy']);
 });
 
 // Berita API Routes
