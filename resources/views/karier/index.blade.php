@@ -39,6 +39,7 @@
                         <th class="text-center align-middle">No</th>
                         <th class="text-center align-middle">Kota</th>
                         <th class="text-center align-middle">Posisi</th>
+                        <th class="text-center align-middle">Email</th>
                         <th class="text-center align-middle">Responsibilities</th>
                         <th class="text-center align-middle">Qualifications</th>
                         <th class="text-center align-middle">Aksi</th>
@@ -50,9 +51,10 @@
                         <td class="text-center align-middle">{{ $index + 1 }}</td>
                         <td class="text-center align-middle">{{ $karier->nama_kota }}</td>
                         <td class="text-center align-middle">{{ $karier->posisi }}</td>
+                        <td class="text-center align-middle">{{ $karier->email }}</td>
                         <td class="align-middle">
-                            <div class="text-truncate" style="max-width: 200px;" title="{!! strip_tags($karier->responsibilities) !!}">
-                                {!! Str::limit(strip_tags($karier->responsibilities), 100) !!}
+                            <div class="text-truncate" style="max-width: 200px;" data-toggle="tooltip" title="{!! nl2br(e($karier->responsibilities)) !!}">
+                                {!! Str::limit($karier->responsibilities, 100) !!}
                             </div>
                         </td>
                         <td class="align-middle">

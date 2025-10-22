@@ -15,14 +15,15 @@ class CareerApplicationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'required|string',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
             'experience' => 'required|string',
             'noticePeriod' => 'required|string',
-            'position' => 'required|string',
+            'position' => 'required|string|max:255',
             'vacancySource' => 'nullable|string',
             'motivation' => 'required|string',
-            'cv' => 'required|file|mimes:pdf|max:5120',
+            'karier_id' => 'required|exists:kariers,id',
+            'cv' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -33,22 +34,37 @@ class CareerApplicationController extends Controller
         }
 
         try {
+            // Dapatkan data karier berdasarkan ID
+            $karier = \App\Models\Karier::findOrFail($request->karier_id);
+            
             // Simpan file CV
             $cvPath = $request->file('cv')->store('cv_applications', 'public');
             
             // Data untuk email
             $data = $request->all();
             $data['cv_path'] = $cvPath;
+            $data['kota'] = $karier->nama_kota;
+            $data['posisi'] = $karier->posisi;
             
-            // Kirim email
-            Mail::to('rancagp19@gmail.com')
+            // Pastikan email karier tersedia
+            if (!$karier->email) {
+                return response()->json([
+                    'error' => 'Email untuk karier ini belum diatur',
+                    'karier_id' => $karier->id,
+                    'karier' => $karier->nama_kota . ' - ' . $karier->posisi
+                ], 400);
+            }
+            
+            Mail::to($karier->email)
                 ->send(new CareerApplication($data));
                 
             return response()->json([
                 'message' => 'Lamaran berhasil dikirim',
                 'data' => [
                     'name' => $data['name'],
-                    'position' => $data['position']
+                    'position' => $data['posisi'],
+                    'kota' => $data['kota'],
+                    'email_tujuan' => $karier->email
                 ]
             ], 200);
             

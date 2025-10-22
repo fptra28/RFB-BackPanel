@@ -32,6 +32,7 @@ class KarierController extends Controller
         $validatedData = $request->validate([
             'nama_kota' => 'required|string|max:255',
             'posisi' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'responsibilities' => 'required|string',
             'qualifications' => 'required|string',
         ]);
@@ -66,6 +67,7 @@ class KarierController extends Controller
         $validatedData = $request->validate([
             'nama_kota' => 'required|string|max:255',
             'posisi' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'responsibilities' => 'required|string',
             'qualifications' => 'required|string',
         ]);

@@ -13,11 +13,20 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="nama_kota">Nama Kota</label>
+                        <label for="nama_kota">Nama Kota:</label>
                         <input type="text" class="form-control @error('nama_kota') is-invalid @enderror" 
                                id="nama_kota" name="nama_kota" value="{{ old('nama_kota') }}" required>
                         @error('nama_kota')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Penerima:</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                               id="email" name="email" value="{{ old('email') }}" required>
+                        @error('email')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>

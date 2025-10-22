@@ -12,6 +12,7 @@ class Karier extends Model
         'slug',
         'responsibilities',
         'qualifications',
+        'email',
     ];
     
     protected $casts = [
