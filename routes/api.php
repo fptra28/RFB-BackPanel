@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\KategoriWakilPialangController;
 use App\Http\Controllers\Api\SpaController;
 use App\Http\Controllers\Api\WakilPialangController;
 use App\Http\Controllers\API\KarierController as ApiKarierController;
+use App\Http\Controllers\Api\CareerApplicationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,3 +64,6 @@ Route::get('/banners/{id}', [ApiBannerController::class, 'show']);
 Route::post('/banners', [ApiBannerController::class, 'store']);
 Route::put('/banners/{id}', [ApiBannerController::class, 'update']);
 Route::delete('/banners/{id}', [ApiBannerController::class, 'destroy']);
+
+// Career Application
+Route::post('/career-application', [CareerApplicationController::class, 'store']);
