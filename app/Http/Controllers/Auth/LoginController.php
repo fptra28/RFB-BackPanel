@@ -40,7 +40,12 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        session()->flash('success', 'You are logged in!');
-        return $this->redirectTo;
+        return '/'; // Arahkan ke home
+    }
+
+    protected function authenticated()
+    {
+        return redirect()->intended($this->redirectPath())
+            ->with('status', 'You are now logged in!');
     }
 }
