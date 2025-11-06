@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\JfxController;
 use App\Http\Controllers\Api\KategoriWakilPialangController;
 use App\Http\Controllers\Api\SpaController;
 use App\Http\Controllers\Api\WakilPialangController;
-use App\Http\Controllers\API\KarierController as ApiKarierController;
+use App\Http\Controllers\Api\KarierController as ApiKarierController;
 use App\Http\Controllers\Api\CareerApplicationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
