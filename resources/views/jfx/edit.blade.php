@@ -21,7 +21,7 @@
             <div class="form-group">
                 <label for="image">Gambar Produk</label>
                 <div class="mb-2">
-                    <img src="{{ asset('img/produk/jfx/' . $produk->image) }}" alt="{{ $produk->name }}" width="150">
+                    <img src="{{ asset('img/produk/' . $produk->image) }}" alt="{{ $produk->name }}" width="150">
                 </div>
                 <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
                 <small>Biarkan kosong jika tidak ingin mengubah gambar</small>
