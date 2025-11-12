@@ -23,7 +23,9 @@ return [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://rfb-backend.test',
-        'https://rfb-backend.test'
+        'https://rfb-backend.test',
+        'https://rfbdev.newsmaker.id',
+        'https://api-dev.rf-berjangka.com',
     ],
 
     'allowed_origins_patterns' => [],
