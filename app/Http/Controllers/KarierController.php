@@ -37,6 +37,17 @@ class KarierController extends Controller
             'qualifications' => 'required|string',
         ]);
 
+        // Generate slug dan cek duplikasi
+        $slug = \Illuminate\Support\Str::slug($validatedData['nama_kota'] . ' ' . $validatedData['posisi']);
+        
+        if (Karier::where('slug', $slug)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['slug' => 'Data karier untuk kota "' . $validatedData['nama_kota'] . '" dengan posisi "' . $validatedData['posisi'] . '" sudah ada.']);
+        }
+
+        $validatedData['slug'] = $slug;
         Karier::create($validatedData);
 
         return redirect()->route('karier.index')
@@ -72,6 +83,18 @@ class KarierController extends Controller
             'qualifications' => 'required|string',
         ]);
 
+        // Generate slug dan cek duplikasi jika ada perubahan nama_kota atau posisi
+        $slug = \Illuminate\Support\Str::slug($validatedData['nama_kota'] . ' ' . $validatedData['posisi']);
+        
+        // Cek apakah slug berubah dan sudah ada di record lain
+        if ($karier->slug !== $slug && Karier::where('slug', $slug)->where('id', '!=', $karier->id)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['slug' => 'Data karier untuk kota "' . $validatedData['nama_kota'] . '" dengan posisi "' . $validatedData['posisi'] . '" sudah ada.']);
+        }
+
+        $validatedData['slug'] = $slug;
         $karier->update($validatedData);
 
         return redirect()->route('karier.index')

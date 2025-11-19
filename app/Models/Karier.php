@@ -23,15 +23,5 @@ class Karier extends Model
     protected static function boot()
     {
         parent::boot();
-        
-        static::creating(function ($karier) {
-            $karier->slug = \Illuminate\Support\Str::slug($karier->nama_kota . ' ' . $karier->posisi);
-        });
-        
-        static::updating(function ($karier) {
-            if ($karier->isDirty(['nama_kota', 'posisi'])) {
-                $karier->slug = \Illuminate\Support\Str::slug($karier->nama_kota . ' ' . $karier->posisi);
-            }
-        });
     }
 }

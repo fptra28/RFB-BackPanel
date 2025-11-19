@@ -8,6 +8,16 @@
         <h6 class="m-0 text-gray-800 font-weight-bold">Tambah Lowongan Baru</h6>
     </div>
     <div class="card-body">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        
         <form action="{{ route('karier.store') }}" method="POST">
             @csrf
             <div class="row">

@@ -32,59 +32,70 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="table-responsive rounded overflow-hidden m-0 border shadow">
-            <table class="table table-striped table-hover mb-0" width="100%" cellspacing="0" id="karierTable">
+        <div class="table-responsive rounded overflow-hidden mb-0 border shadow">
+            <table class="table table-striped table-hover" width="100%" cellspacing="0">
                 <thead class="thead-dark">
-                    <tr>
-                        <th class="text-center align-middle">No</th>
-                        <th class="text-center align-middle">Kota</th>
-                        <th class="text-center align-middle">Posisi</th>
-                        <th class="text-center align-middle">Email</th>
-                        <th class="text-center align-middle">Responsibilities</th>
-                        <th class="text-center align-middle">Qualifications</th>
-                        <th class="text-center align-middle">Aksi</th>
+                    <tr class="text-center align-middle">
+                        <th style="width: 5%">No</th>
+                        <th style="width: 15%">Kota</th>
+                        <th style="width: 20%">Posisi</th>
+                        <th class="d-none d-md-table-cell" style="width: 20%">Email</th>
+                        <th class="d-none d-lg-table-cell" style="width: 25%">Responsibilities</th>
+                        <th class="d-none d-xl-table-cell" style="width: 25%">Qualifications</th>
+                        <th style="width: 15%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($kariers as $index => $karier)
                     <tr>
                         <td class="text-center align-middle">{{ $index + 1 }}</td>
-                        <td class="text-center align-middle">{{ $karier->nama_kota }}</td>
-                        <td class="text-center align-middle">{{ $karier->posisi }}</td>
-                        <td class="text-center align-middle">{{ $karier->email }}</td>
-                        <td class="align-middle">
-                            <div class="text-truncate" style="max-width: 200px;" data-toggle="tooltip" title="{!! nl2br(e($karier->responsibilities)) !!}">
-                                {!! Str::limit($karier->responsibilities, 100) !!}
-                            </div>
+                        <td class="align-middle">{{ $karier->nama_kota }}</td>
+                        <td class="align-middle">{{ $karier->posisi }}</td>
+                        <td class="align-middle d-none d-md-table-cell">
+                            <small class="text-muted">{{ $karier->email }}</small>
                         </td>
-                        <td class="align-middle">
-                            <div class="text-truncate" style="max-width: 200px;" title="{!! strip_tags($karier->qualifications) !!}">
-                                {!! Str::limit(strip_tags($karier->qualifications), 100) !!}
-                            </div>
+                        <td class="align-middle d-none d-lg-table-cell">
+                            <small>{{ \Illuminate\Support\Str::limit(strip_tags($karier->responsibilities), 50) }}</small>
+                        </td>
+                        <td class="align-middle d-none d-xl-table-cell">
+                            <small>{{ \Illuminate\Support\Str::limit(strip_tags($karier->qualifications), 50) }}</small>
                         </td>
                         <td class="align-middle">
                             <div class="d-flex justify-content-center">
-                                <a href="{{ route('karier.edit', $karier->id) }}" 
-                                   class="btn btn-sm btn-primary mx-1" 
-                                   title="Edit">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form action="{{ route('karier.destroy', $karier->id) }}" 
-                                      method="POST" 
-                                      class="d-inline"
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger mx-1" title="Hapus">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </form>
+                                <a href="{{ route('karier.edit', $karier->id) }}" class="btn btn-sm btn-primary w-100 mr-1">Edit</a>
+                                <button type="button" class="btn btn-sm btn-danger w-100 ml-1" data-toggle="modal" data-target="#deleteModal{{ $karier->id }}">Hapus</button>
                             </div>
+
+                            <!-- Modal Konfirmasi Hapus -->
+                            <div class="modal fade" id="deleteModal{{ $karier->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ $karier->id }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ $karier->id }}">Konfirmasi Hapus</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah Anda yakin ingin menghapus data karier untuk <strong>"{{ $karier->nama_kota }} - {{ $karier->posisi }}"</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            <form action="{{ route('karier.destroy', $karier->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Modal -->
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Tidak ada data karier</td>
+                        <td colspan="7" class="text-center">Tidak ada data karier</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -97,32 +108,5 @@
         </div>
     </div>
 </div>
-
-@push('styles')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-@endpush
-
-@push('scripts')
-<!-- DataTables  & Plugins -->
-<script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-
-<script>
-    $(function () {
-        $("#karierTable").DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "order": [[0, 'asc']],
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Indonesian.json"
-            }
-        });
-    });
-</script>
-@endpush
 
 @endsection
