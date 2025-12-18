@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
@@ -21,14 +22,11 @@ class BeritaController extends Controller
         $query = Berita::query();
 
         if ($status === 'draft') {
-            // Tampilkan hanya berita dengan status draft
             $query->where('status', 'draft');
         } elseif ($kategori) {
-            // Jika kategori dipilih, dan status bukan draft, tampilkan berdasarkan kategori dan status published
             $query->where('kategori', $kategori)
                 ->where('status', 'published');
         } else {
-            // Default: tampilkan semua berita yang published
             $query->where('status', 'published');
         }
 
@@ -45,7 +43,6 @@ class BeritaController extends Controller
 
     public function store(Request $request)
     {
-        // Menambahkan validasi untuk kategori
         $request->validate([
             'judul' => 'required|string|max:100',
             'isi' => 'required|string',
@@ -54,21 +51,32 @@ class BeritaController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Menambahkan kategori ke dalam data
         $data = $request->only(['judul', 'isi', 'kategori', 'status']);
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $tanggal = date('Y-m-d-H-i-s');
-            $judulSlug = str_replace(' ', '-', strtolower($request->judul));
-            $imageName = $tanggal . '-' . $judulSlug . '.' . $image->getClientOriginalExtension();
 
-            $image->move(public_path('img/berita'), $imageName);
+            // bikin nama file aman + unik
+            $tanggal = now()->format('Y-m-d-H-i-s');
+            $judulSlug = Str::slug($request->judul);
+            $ext = strtolower($image->getClientOriginalExtension());
 
+            $imageName = $tanggal . '-' . $judulSlug . '.' . $ext;
+
+            // pastiin folder ada
+            $dir = public_path('img/berita');
+            if (!File::exists($dir)) {
+                File::makeDirectory($dir, 0755, true);
+            }
+
+            // simpan ke public/img/berita
+            $image->move($dir, $imageName);
+
+            // simpan di DB hanya filename
             $data['image'] = $imageName;
         }
 
-        berita::create($data);
+        Berita::create($data);
 
         return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
@@ -76,13 +84,9 @@ class BeritaController extends Controller
     public function show(string $id)
     {
         try {
-            // Mencari berita berdasarkan ID atau akan gagal jika tidak ditemukan
-            $berita = berita::findOrFail($id);
-
-            // Mengembalikan view dengan data berita yang ditemukan
+            $berita = Berita::findOrFail($id);
             return view('berita.show', compact('berita'));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Jika berita tidak ditemukan, arahkan ke halaman berita.index dengan pesan error
             return redirect()->route('berita.index')->with('error', 'Data tidak ditemukan');
         }
     }
@@ -90,22 +94,17 @@ class BeritaController extends Controller
     public function edit(string $id)
     {
         try {
-            // Mencari berita berdasarkan ID atau akan gagal jika tidak ditemukan
-            $berita = berita::findOrFail($id);
-
-            // Mengembalikan view dengan data berita yang ditemukan
+            $berita = Berita::findOrFail($id);
             return view('berita.edit', compact('berita'));
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Jika berita tidak ditemukan, arahkan ke halaman berita.index dengan pesan error
             return redirect()->route('berita.index')->with('error', 'Data tidak ditemukan');
         }
     }
 
     public function update(Request $request, string $id)
     {
-        $berita = berita::findOrFail($id);
+        $berita = Berita::findOrFail($id);
 
-        // Menambahkan validasi untuk kategori
         $request->validate([
             'judul' => 'required|string|max:100',
             'isi' => 'required|string',
@@ -114,21 +113,31 @@ class BeritaController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Menambahkan kategori ke dalam data
         $data = $request->only(['judul', 'isi', 'kategori', 'status']);
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($berita->image && File::exists(public_path($berita->image))) {
-                File::delete(public_path($berita->image));
+            // hapus gambar lama (karena DB simpen filename aja)
+            if ($berita->image) {
+                $oldPath = public_path('img/berita/' . $berita->image);
+                if (File::exists($oldPath)) {
+                    File::delete($oldPath);
+                }
             }
 
             $image = $request->file('image');
-            $tanggal = date('Y-m-d-H-i-s');
-            $judulSlug = str_replace(' ', '-', strtolower($request->judul));
-            $imageName = $tanggal . '-' . $judulSlug . '.' . $image->getClientOriginalExtension();
 
-            $image->move(public_path('img/berita'), $imageName);
+            $tanggal = now()->format('Y-m-d-H-i-s');
+            $judulSlug = Str::slug($request->judul);
+            $ext = strtolower($image->getClientOriginalExtension());
+
+            $imageName = $tanggal . '-' . $judulSlug . '.' . $ext;
+
+            $dir = public_path('img/berita');
+            if (!File::exists($dir)) {
+                File::makeDirectory($dir, 0755, true);
+            }
+
+            $image->move($dir, $imageName);
 
             $data['image'] = $imageName;
         }
@@ -140,11 +149,13 @@ class BeritaController extends Controller
 
     public function destroy(string $id)
     {
-        $berita = berita::findOrFail($id);
+        $berita = Berita::findOrFail($id);
 
-        // Hapus gambar jika ada
-        if ($berita->image && File::exists(public_path($berita->image))) {
-            File::delete(public_path($berita->image));
+        if ($berita->image) {
+            $path = public_path('img/berita/' . $berita->image);
+            if (File::exists($path)) {
+                File::delete($path);
+            }
         }
 
         $berita->delete();
