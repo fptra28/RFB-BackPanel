@@ -34,6 +34,7 @@ Route::prefix('produk/jfx')->name('jfx.')->group(function () {
     Route::get('/{id}/edit', [JfxController::class, 'edit'])->name('edit');
     Route::get('/{id}/show', [JfxController::class, 'show'])->name('show');
     Route::delete('/{id}/delete', [JfxController::class, 'destroy'])->name('destroy');
+    Route::post('/update-order', [JfxController::class, 'updateOrder'])->name('update-order');
 });
 
 // Produk SPA

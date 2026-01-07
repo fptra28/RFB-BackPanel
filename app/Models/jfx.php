@@ -18,6 +18,11 @@ class Jfx extends Model
         'specs',
         'image',
         'slug',
+        'order',
+    ];
+    
+    protected $attributes = [
+        'order' => 0,
     ];
 
     // Buat slug otomatis saat membuat atau mengupdate

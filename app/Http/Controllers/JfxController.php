@@ -15,7 +15,7 @@ class JfxController extends Controller
 
     public function index()
     {
-        $ProdukJFX = Jfx::all();
+        $ProdukJFX = Jfx::orderBy('order')->get();
         $countProduk = Jfx::count();
 
         return view('jfx.index', compact('ProdukJFX', 'countProduk'));
@@ -122,5 +122,22 @@ class JfxController extends Controller
         $produk->delete();
 
         return redirect()->route('jfx.index')->with('success', 'Produk berhasil dihapus!');
+    }
+    
+    /**
+     * Update the order of products
+     */
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:jfxes,id'
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            Jfx::where('id', $id)->update(['order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }
