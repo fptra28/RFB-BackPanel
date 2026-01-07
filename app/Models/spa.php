@@ -18,6 +18,11 @@ class Spa extends Model
         'specs',
         'image',
         'slug',
+        'order',
+    ];
+    
+    protected $attributes = [
+        'order' => 0,
     ];
 
     protected static function boot()

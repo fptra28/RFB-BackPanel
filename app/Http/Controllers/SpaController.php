@@ -15,7 +15,7 @@ class SpaController extends Controller
 
     public function index()
     {
-        $produkSPA = Spa::all();
+        $produkSPA = Spa::orderBy('order')->get();
         $countProduk = $produkSPA->count();
 
         return view('spa.index', compact('produkSPA', 'countProduk'));
@@ -111,10 +111,11 @@ class SpaController extends Controller
         return redirect()->route('spa.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $produk = Spa::findOrFail($id);
 
+        // Hapus gambar jika ada
         if ($produk->image && File::exists(public_path('img/produk/' . $produk->image))) {
             File::delete(public_path('img/produk/' . $produk->image));
         }
@@ -122,5 +123,22 @@ class SpaController extends Controller
         $produk->delete();
 
         return redirect()->route('spa.index')->with('success', 'Produk berhasil dihapus!');
+    }
+    
+    /**
+     * Update the order of products
+     */
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:spas,id'
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            Spa::where('id', $id)->update(['order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

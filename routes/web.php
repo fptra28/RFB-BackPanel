@@ -46,6 +46,7 @@ Route::prefix('produk/spa')->name('spa.')->group(function () {
     Route::get('/{id}/edit', [SpaController::class, 'edit'])->name('edit');
     Route::get('/{id}/show', [SpaController::class, 'show'])->name('show');
     Route::delete('/{id}/delete', [SpaController::class, 'destroy'])->name('destroy');
+    Route::post('/update-order', [SpaController::class, 'updateOrder'])->name('update-order');
 });
 
 // Berita
