@@ -12,7 +12,7 @@ class KarierController extends Controller
      */
     public function index()
     {
-        $kariers = Karier::orderBy('order')->paginate(10);
+        $kariers = Karier::orderBy('created_at', 'desc')->paginate(10);
         return view('karier.index', compact('kariers'));
     }
 

@@ -11,7 +11,9 @@ class JfxController extends Controller
     // GET /api/jfx
     public function index()
     {
-        $jfxes = Jfx::latest()->get();
+        $jfxes = Jfx::orderBy('order', 'desc')
+            ->latest()
+            ->get();
 
         return response()->json($jfxes, 200);
     }

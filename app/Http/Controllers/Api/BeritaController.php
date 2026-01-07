@@ -11,7 +11,10 @@ class BeritaController extends Controller
     // Menampilkan semua berita yang berstatus published
     public function index()
     {
-        $berita = Berita::where('status', 'published')->latest()->get();
+        $berita = Berita::where('status', 'published')
+            ->orderBy('order', 'desc')
+            ->latest()
+            ->get();
 
         return response()->json($berita, 200);
     }

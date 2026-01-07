@@ -17,7 +17,10 @@ class KarierController extends Controller
     public function index()
     {
         try {
-            $kariers = Karier::latest()->get();
+            $kariers = Karier::orderBy('order', 'desc')
+                ->latest()
+                ->get();
+                
             return response()->json([
                 'success' => true,
                 'message' => 'Daftar data karier berhasil diambil',

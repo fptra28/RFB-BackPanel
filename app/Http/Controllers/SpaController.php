@@ -15,8 +15,8 @@ class SpaController extends Controller
 
     public function index()
     {
-        $produkSPA = Spa::orderBy('order')->get();
-        $countProduk = $produkSPA->count();
+        $produkSPA = Spa::orderBy('created_at', 'desc')->get();
+        $countProduk = Spa::count();
 
         return view('spa.index', compact('produkSPA', 'countProduk'));
     }

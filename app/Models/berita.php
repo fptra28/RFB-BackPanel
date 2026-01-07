@@ -33,6 +33,9 @@ class Berita extends Model
 
         static::creating(function ($berita) {
             $berita->slug = Str::slug($berita->judul);
+            // Set order to max order + 1
+            $maxOrder = static::max('order') ?? 0;
+            $berita->order = $maxOrder + 1;
         });
 
         static::updating(function ($berita) {

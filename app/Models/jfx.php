@@ -32,6 +32,9 @@ class Jfx extends Model
 
         static::creating(function ($jfx) {
             $jfx->slug = Str::slug($jfx->name);
+            // Set order to max order + 1
+            $maxOrder = static::max('order') ?? 0;
+            $jfx->order = $maxOrder + 1;
         });
 
         static::updating(function ($jfx) {

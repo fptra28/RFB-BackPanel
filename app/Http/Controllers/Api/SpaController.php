@@ -11,7 +11,9 @@ class SpaController extends Controller
     // GET /api/spa
     public function index()
     {
-        $spas = Spa::latest()->get();
+        $spas = Spa::orderBy('order', 'desc')
+            ->latest()
+            ->get();
 
         return response()->json($spas, 200);
     }

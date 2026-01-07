@@ -32,7 +32,7 @@ class BeritaController extends Controller
             $query->where('status', 'published');
         }
 
-        $beritaFiltered = $query->orderBy('order')->get();
+        $beritaFiltered = $query->latest()->orderBy('order', 'desc')->get();
         $countBerita = $beritaFiltered->count();
 
         return view('berita.index', compact('beritaFiltered', 'countBerita'));

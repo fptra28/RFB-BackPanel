@@ -15,7 +15,7 @@ class JfxController extends Controller
 
     public function index()
     {
-        $ProdukJFX = Jfx::orderBy('order')->get();
+        $ProdukJFX = Jfx::orderBy('created_at', 'desc')->get();
         $countProduk = Jfx::count();
 
         return view('jfx.index', compact('ProdukJFX', 'countProduk'));

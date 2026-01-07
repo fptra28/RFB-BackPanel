@@ -31,6 +31,9 @@ class Spa extends Model
 
         static::creating(function ($spa) {
             $spa->slug = Str::slug($spa->name);
+            // Set order to max order + 1
+            $maxOrder = static::max('order') ?? 0;
+            $spa->order = $maxOrder + 1;
         });
 
         static::updating(function ($spa) {
