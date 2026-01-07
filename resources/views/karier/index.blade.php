@@ -2,25 +2,31 @@
 
 @section('namaPage', 'Kelola Karier')
 
+@push('styles')
+<style>
+    .sortable-ghost {
+        opacity: 0.5;
+        background: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .sortable-chosen {
+        cursor: move;
+        background-color: #f8f9fa;
+    }
+    .sortable-drag {
+        cursor: grabbing;
+        background-color: #fff;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: rotate(1deg);
+    }
+    .sortable-ghost td {
+        border: 2px dashed #3490dc;
+        background: #f0f7ff;
+    }
+</style>
+@endpush
+
 @section('main-content')
-
-@if (session('success'))
-<div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
-    {{ session('success') }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-@endif
-
-@if (session('error'))
-<div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
-    {{ session('error') }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-@endif
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -32,8 +38,29 @@
         </div>
     </div>
     <div class="card-body">
+        <!-- Notifikasi -->
+        <div id="notification-container">
+            @if (session('success'))
+            <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
+        </div>
+
         <div class="table-responsive rounded overflow-hidden mb-0 border shadow">
-            <table class="table table-striped table-hover" width="100%" cellspacing="0">
+            <table class="table table-striped table-hover" width="100%" cellspacing="0" id="sortable-table">
                 <thead class="thead-dark">
                     <tr class="text-center align-middle">
                         <th style="width: 5%">No</th>
@@ -45,9 +72,9 @@
                         <th style="width: 15%">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="sortable-tbody">
                     @forelse ($kariers as $index => $karier)
-                    <tr>
+                    <tr data-id="{{ $karier->id }}">
                         <td class="text-center align-middle">{{ $index + 1 }}</td>
                         <td class="align-middle">{{ $karier->nama_kota }}</td>
                         <td class="align-middle">{{ $karier->posisi }}</td>
@@ -110,3 +137,105 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tbody = document.getElementById('sortable-tbody');
+        if (!tbody) {
+            console.error('Element with id "sortable-tbody" not found!');
+            return;
+        }
+        
+        // Inisialisasi SortableJS
+        const sortable = new Sortable(tbody, {
+            animation: 150,
+            handle: 'td', // Memungkinkan drag dari sel manapun
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onStart: function(evt) {
+                // Tambahkan class saat mulai drag
+                evt.item.classList.add('sortable-dragging');
+            },
+            onEnd: function(evt) {
+                // Hapus class setelah selesai drag
+                evt.item.classList.remove('sortable-dragging');
+                
+                // Ambil semua ID dalam urutan baru
+                const newOrder = [];
+                const rows = tbody.querySelectorAll('tr');
+                
+                rows.forEach((row, index) => {
+                    const id = row.getAttribute('data-id');
+                    if (id) {
+                        newOrder.push(parseInt(id));
+                        // Update nomor urut
+                        const noTd = row.querySelector('td:first-child');
+                        if (noTd) noTd.textContent = index + 1;
+                    }
+                });
+
+                // Kirim permintaan AJAX untuk menyimpan urutan baru
+                console.log('Mengirim permintaan update order:', newOrder);
+                
+                fetch('{{ route("karier.update-order") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ order: newOrder })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response dari server:', data);
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses
+                        showAlert('success', 'Urutan karier berhasil diperbarui.');
+                    } else {
+                        throw new Error(data.message || 'Gagal memperbarui urutan');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('danger', 'Gagal memperbarui urutan: ' + error.message);
+                    // Reload halaman untuk sinkronisasi dengan server
+                    setTimeout(() => window.location.reload(), 2000);
+                });
+            }
+        });
+        
+        // Fungsi untuk menampilkan notifikasi
+        function showAlert(type, message) {
+            // Buat elemen alert baru
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} border-left-${type} alert-dismissible fade show`;
+            alertDiv.role = 'alert';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>`;
+            
+            // Tambahkan ke container notifikasi di atas tabel
+            const container = document.getElementById('notification-container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            // Sembunyikan setelah 5 detik
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 150);
+            }, 5000);
+        }
+    });
+</script>
+@endpush

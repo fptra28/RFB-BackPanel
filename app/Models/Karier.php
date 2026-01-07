@@ -13,11 +13,16 @@ class Karier extends Model
         'responsibilities',
         'qualifications',
         'email',
+        'order',
     ];
     
     protected $casts = [
         'responsibilities' => 'string',
         'qualifications' => 'string',
+    ];
+    
+    protected $attributes = [
+        'order' => 0,
     ];
     
     protected static function boot()

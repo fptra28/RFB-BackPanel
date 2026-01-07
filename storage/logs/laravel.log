@@ -24451,3 +24451,183 @@ Did you mean one of these?
 #53 C:\\laragon\\www\\RFB_Project\\backend\\public\\index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #54 {main}
 "} 
+[2026-01-07 14:08:34] local.ERROR: Method App\Http\Controllers\KarierController::updateOrder does not exist. {"userId":3,"exception":"[object] (BadMethodCallException(code: 0): Method App\\Http\\Controllers\\KarierController::updateOrder does not exist. at C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php:68)
+[stacktrace]
+#0 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php(54): Illuminate\\Routing\\Controller->__call('updateOrder', Array)
+#1 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(44): Illuminate\\Routing\\Controller->callAction('updateOrder', Array)
+#2 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\KarierController), 'updateOrder')
+#3 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(212): Illuminate\\Routing\\Route->runController()
+#4 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(809): Illuminate\\Routing\\Route->run()
+#5 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(170): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#6 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#7 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#8 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#9 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#10 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#11 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#12 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#14 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#21 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(787): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#22 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(751): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#23 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(740): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#24 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#25 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(170): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#42 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#43 C:\\laragon\\www\\RFB_Project\\backend\\public\\index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#44 {main}
+"} 
+[2026-01-07 14:09:22] local.ERROR: Method App\Http\Controllers\KarierController::updateOrder does not exist. {"userId":3,"exception":"[object] (BadMethodCallException(code: 0): Method App\\Http\\Controllers\\KarierController::updateOrder does not exist. at C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php:68)
+[stacktrace]
+#0 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php(54): Illuminate\\Routing\\Controller->__call('updateOrder', Array)
+#1 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(44): Illuminate\\Routing\\Controller->callAction('updateOrder', Array)
+#2 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(266): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\KarierController), 'updateOrder')
+#3 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(212): Illuminate\\Routing\\Route->runController()
+#4 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(809): Illuminate\\Routing\\Route->run()
+#5 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(170): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#6 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#7 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#8 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(88): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#9 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#10 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#11 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#12 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#14 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(75): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#21 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(787): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#22 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(751): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#23 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(740): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#24 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#25 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(170): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(209): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#42 C:\\laragon\\www\\RFB_Project\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#43 C:\\laragon\\www\\RFB_Project\\backend\\public\\index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#44 {main}
+"} 
+[2026-01-07 14:17:56] local.INFO: Menerima permintaan update order: {"order":[10,9,11,12,14]} 
+[2026-01-07 14:17:57] local.INFO: Mengupdate karier ID: 10 dengan order: 1  
+[2026-01-07 14:17:57] local.INFO: Mengupdate karier ID: 9 dengan order: 2  
+[2026-01-07 14:17:57] local.INFO: Mengupdate karier ID: 11 dengan order: 3  
+[2026-01-07 14:17:57] local.INFO: Mengupdate karier ID: 12 dengan order: 4  
+[2026-01-07 14:17:57] local.INFO: Mengupdate karier ID: 14 dengan order: 5  
+[2026-01-07 14:17:57] local.INFO: Update order selesai  
+[2026-01-07 14:18:11] local.INFO: Menerima permintaan update order: {"order":[14,10,9,11,12]} 
+[2026-01-07 14:18:11] local.INFO: Mengupdate karier ID: 14 dengan order: 1  
+[2026-01-07 14:18:11] local.INFO: Mengupdate karier ID: 10 dengan order: 2  
+[2026-01-07 14:18:11] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:18:11] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:18:11] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:18:11] local.INFO: Update order selesai  
+[2026-01-07 14:18:45] local.INFO: Menerima permintaan update order: {"order":[10,14,9,11,12]} 
+[2026-01-07 14:18:45] local.INFO: Mengupdate karier ID: 10 dengan order: 1  
+[2026-01-07 14:18:45] local.INFO: Mengupdate karier ID: 14 dengan order: 2  
+[2026-01-07 14:18:45] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:18:45] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:18:45] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:18:45] local.INFO: Update order selesai  
+[2026-01-07 14:19:03] local.INFO: Menerima permintaan update order: {"order":[14,10,9,11,12]} 
+[2026-01-07 14:19:04] local.INFO: Mengupdate karier ID: 14 dengan order: 1  
+[2026-01-07 14:19:04] local.INFO: Mengupdate karier ID: 10 dengan order: 2  
+[2026-01-07 14:19:04] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:19:04] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:19:04] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:19:04] local.INFO: Update order selesai  
+[2026-01-07 14:24:31] local.INFO: Menerima permintaan update order: {"order":[10,14,9,11,12]} 
+[2026-01-07 14:24:31] local.INFO: Mengupdate karier ID: 10 dengan order: 1  
+[2026-01-07 14:24:31] local.INFO: Mengupdate karier ID: 14 dengan order: 2  
+[2026-01-07 14:24:31] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:24:31] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:24:31] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:24:31] local.INFO: Update order selesai  
+[2026-01-07 14:24:32] local.INFO: Menerima permintaan update order: {"order":[14,10,9,11,12]} 
+[2026-01-07 14:24:32] local.INFO: Mengupdate karier ID: 14 dengan order: 1  
+[2026-01-07 14:24:32] local.INFO: Mengupdate karier ID: 10 dengan order: 2  
+[2026-01-07 14:24:32] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:24:32] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:24:32] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:24:32] local.INFO: Update order selesai  
+[2026-01-07 14:24:51] local.INFO: Menerima permintaan update order: {"order":[10,14,9,11,12]} 
+[2026-01-07 14:24:51] local.INFO: Mengupdate karier ID: 10 dengan order: 1  
+[2026-01-07 14:24:51] local.INFO: Mengupdate karier ID: 14 dengan order: 2  
+[2026-01-07 14:24:51] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:24:51] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:24:51] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:24:51] local.INFO: Update order selesai  
+[2026-01-07 14:26:22] local.INFO: Menerima permintaan update order: {"order":[14,10,9,11,12]} 
+[2026-01-07 14:26:22] local.INFO: Mengupdate karier ID: 14 dengan order: 1  
+[2026-01-07 14:26:22] local.INFO: Mengupdate karier ID: 10 dengan order: 2  
+[2026-01-07 14:26:22] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:26:22] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:26:22] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:26:22] local.INFO: Update order selesai  
+[2026-01-07 14:26:42] local.INFO: Menerima permintaan update order: {"order":[10,14,9,11,12]} 
+[2026-01-07 14:26:42] local.INFO: Mengupdate karier ID: 10 dengan order: 1  
+[2026-01-07 14:26:42] local.INFO: Mengupdate karier ID: 14 dengan order: 2  
+[2026-01-07 14:26:42] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:26:42] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:26:42] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:26:42] local.INFO: Update order selesai  
+[2026-01-07 14:29:14] local.INFO: Menerima permintaan update order: {"order":[14,10,9,11,12]} 
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 14 dengan order: 1  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 10 dengan order: 2  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:29:15] local.INFO: Update order selesai  
+[2026-01-07 14:29:15] local.INFO: Menerima permintaan update order: {"order":[10,14,9,11,12]} 
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 10 dengan order: 1  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 14 dengan order: 2  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:29:15] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:29:15] local.INFO: Update order selesai  
+[2026-01-07 14:29:19] local.INFO: Menerima permintaan update order: {"order":[14,10,9,11,12]} 
+[2026-01-07 14:29:19] local.INFO: Mengupdate karier ID: 14 dengan order: 1  
+[2026-01-07 14:29:19] local.INFO: Mengupdate karier ID: 10 dengan order: 2  
+[2026-01-07 14:29:19] local.INFO: Mengupdate karier ID: 9 dengan order: 3  
+[2026-01-07 14:29:19] local.INFO: Mengupdate karier ID: 11 dengan order: 4  
+[2026-01-07 14:29:19] local.INFO: Mengupdate karier ID: 12 dengan order: 5  
+[2026-01-07 14:29:19] local.INFO: Update order selesai  

@@ -12,7 +12,7 @@ class KarierController extends Controller
      */
     public function index()
     {
-        $kariers = Karier::orderBy('created_at', 'asc')->paginate(10);
+        $kariers = Karier::orderBy('order')->paginate(10);
         return view('karier.index', compact('kariers'));
     }
 
@@ -110,5 +110,40 @@ class KarierController extends Controller
 
         return redirect()->route('karier.index')
             ->with('success', 'Data karier berhasil dihapus');
+    }
+
+    /**
+     * Update the order of karier
+     */
+    public function updateOrder(Request $request)
+    {
+        try {
+            \Log::info('Menerima permintaan update order:', $request->all());
+            
+            $request->validate([
+                'order' => 'required|array',
+                'order.*' => 'integer|exists:kariers,id'
+            ]);
+
+            \DB::beginTransaction();
+            
+            foreach ($request->order as $index => $id) {
+                \Log::info("Mengupdate karier ID: $id dengan order: " . ($index + 1));
+                Karier::where('id', $id)->update(['order' => $index + 1]);
+            }
+            
+            \DB::commit();
+            
+            \Log::info('Update order selesai');
+            return response()->json(['success' => true]);
+            
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error('Gagal update order karier: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui urutan karier: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

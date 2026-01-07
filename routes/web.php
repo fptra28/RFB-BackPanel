@@ -94,6 +94,7 @@ Route::prefix('website')->name('profileWeb.')->group(function () {
 // Rute untuk Karier
 Route::resource('karier', KarierController::class)->except(['show']);
 Route::get('karier/{karier:slug}', [KarierController::class, 'show'])->name('karier.show');
+Route::post('karier/update-order', [KarierController::class, 'updateOrder'])->name('karier.update-order');
 
 // Rute untuk Banner
 Route::prefix('banner')->name('banner.')->group(function () {
