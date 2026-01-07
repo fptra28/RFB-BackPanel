@@ -2,6 +2,30 @@
 
 @section('namaPage', 'Berita')
 
+@push('styles')
+<style>
+    .sortable-ghost {
+        opacity: 0.5;
+        background: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .sortable-chosen {
+        cursor: move;
+        background-color: #f8f9fa;
+    }
+    .sortable-drag {
+        cursor: grabbing;
+        background-color: #fff;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: rotate(1deg);
+    }
+    .sortable-ghost td {
+        border: 2px dashed #3490dc;
+        background: #f0f7ff;
+    }
+</style>
+@endpush
+
 @section('main-content')
 
 @if (session('success'))
@@ -69,7 +93,7 @@
         </form>
 
         <div class="table-responsive rounded overflow-hidden m-0 border shadow">
-            <table class="table table-striped table-hover mb-0" width="100%" cellspacing="0">
+            <table class="table table-striped table-hover mb-0" width="100%" cellspacing="0" id="sortable-table">
                 <thead class="thead-dark">
                     <tr>
                         <th class="text-center align-middle">No</th>
@@ -80,9 +104,9 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="sortable-tbody">
                     @forelse ($beritaFiltered as $index => $berita)
-                    <tr>
+                    <tr data-id="{{ $berita->id }}">
                         <td class="text-center align-middle">{{ $index + 1 }}</td>
                         <td class="text-left align-middle" style="max-width: 350px;">
                             {{ Str::limit(strip_tags($berita->judul), 90, '...') }}</td>
@@ -149,3 +173,84 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tbody = document.getElementById('sortable-tbody');
+        
+        // Simpan urutan asli
+        let originalOrder = [];
+        tbody.querySelectorAll('tr').forEach(row => {
+            originalOrder.push(row.getAttribute('data-id'));
+        });
+
+        // Inisialisasi SortableJS untuk seluruh baris
+        const sortable = new Sortable(tbody, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onStart: function() {
+                // Simpan urutan asli saat mulai drag
+                originalOrder = [];
+                tbody.querySelectorAll('tr').forEach(row => {
+                    originalOrder.push(row.getAttribute('data-id'));
+                });
+            },
+            onEnd: function(evt) {
+                // Ambil semua ID dalam urutan baru
+                const newOrder = [];
+                tbody.querySelectorAll('tr').forEach((row, index) => {
+                    newOrder.push(row.getAttribute('data-id'));
+                    // Update nomor urut
+                    const noTd = row.querySelector('td:first-child');
+                    noTd.textContent = index + 1;
+                });
+
+                // Cek apakah ada perubahan urutan
+                const hasChanged = JSON.stringify(originalOrder) !== JSON.stringify(newOrder);
+
+                // Hanya kirim permintaan jika ada perubahan
+                if (!hasChanged) return;
+
+                // Kirim permintaan AJAX untuk menyimpan urutan baru
+                fetch('{{ route("berita.update-order") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ order: newOrder })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses
+                        const alert = document.createElement('div');
+                        alert.className = 'alert alert-success alert-dismissible fade show';
+                        alert.role = 'alert';
+                        alert.innerHTML = `
+                            Urutan berita berhasil diperbarui.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        `;
+                        document.querySelector('.card-body').insertBefore(alert, document.querySelector('.table-responsive'));
+
+                        // Sembunyikan notifikasi setelah 3 detik
+                        setTimeout(() => {
+                            alert.classList.remove('show');
+                            setTimeout(() => alert.remove(), 150);
+                        }, 3000);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    });
+</script>
+@endpush

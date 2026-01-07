@@ -19,6 +19,11 @@ class Berita extends Model
         'kategori',
         'status',
         'slug',
+        'order',
+    ];
+    
+    protected $attributes = [
+        'order' => 0,
     ];
 
     // Buat slug otomatis saat membuat atau mengupdate

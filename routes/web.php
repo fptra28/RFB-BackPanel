@@ -58,6 +58,7 @@ Route::prefix('berita')->name('berita.')->group(function () {
     Route::get('/{id}/edit', [BeritaController::class, 'edit'])->name('edit');
     Route::get('/{id}/show', [BeritaController::class, 'show'])->name('show');
     Route::delete('/{id}/delete', [BeritaController::class, 'destroy'])->name('destroy');
+    Route::post('/update-order', [BeritaController::class, 'updateOrder'])->name('update-order');
 });
 
 // Wakil Pialang & Kategori

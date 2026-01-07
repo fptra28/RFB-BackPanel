@@ -32,7 +32,7 @@ class BeritaController extends Controller
             $query->where('status', 'published');
         }
 
-        $beritaFiltered = $query->latest()->get();
+        $beritaFiltered = $query->orderBy('order')->get();
         $countBerita = $beritaFiltered->count();
 
         return view('berita.index', compact('beritaFiltered', 'countBerita'));
@@ -138,17 +138,35 @@ class BeritaController extends Controller
         return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $berita = berita::findOrFail($id);
+        $berita = Berita::findOrFail($id);
 
         // Hapus gambar jika ada
-        if ($berita->image && File::exists(public_path($berita->image))) {
-            File::delete(public_path($berita->image));
+        if ($berita->image && File::exists(public_path('img/berita/' . $berita->image))) {
+            File::delete(public_path('img/berita/' . $berita->image));
         }
 
         $berita->delete();
 
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus.');
+        return redirect()->route('berita.index')
+            ->with('success', 'Berita berhasil dihapus!');
+    }
+
+    /**
+     * Update the order of berita
+     */
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:beritas,id'
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            Berita::where('id', $id)->update(['order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }
