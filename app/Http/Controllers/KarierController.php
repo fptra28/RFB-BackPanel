@@ -12,7 +12,7 @@ class KarierController extends Controller
      */
     public function index()
     {
-        $kariers = Karier::orderBy('created_at', 'desc')->paginate(10);
+        $kariers = Karier::orderBy('order', 'desc')->paginate(10);
         return view('karier.index', compact('kariers'));
     }
 
@@ -106,10 +106,14 @@ class KarierController extends Controller
      */
     public function destroy(Karier $karier)
     {
+        $order = $karier->order;
         $karier->delete();
 
+        // Update order untuk karier yang memiliki order lebih besar dari yang dihapus
+        Karier::where('order', '>', $order)->decrement('order');
+
         return redirect()->route('karier.index')
-            ->with('success', 'Data karier berhasil dihapus');
+            ->with('success', 'Data karier berhasil dihapus! Urutan telah diperbarui.');
     }
 
     /**
@@ -117,33 +121,24 @@ class KarierController extends Controller
      */
     public function updateOrder(Request $request)
     {
-        try {
-            \Log::info('Menerima permintaan update order:', $request->all());
-            
-            $request->validate([
-                'order' => 'required|array',
-                'order.*' => 'integer|exists:kariers,id'
-            ]);
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:kariers,id'
+        ]);
 
-            \DB::beginTransaction();
-            
-            foreach ($request->order as $index => $id) {
-                \Log::info("Mengupdate karier ID: $id dengan order: " . ($index + 1));
-                Karier::where('id', $id)->update(['order' => $index + 1]);
-            }
-            
-            \DB::commit();
-            
-            \Log::info('Update order selesai');
-            return response()->json(['success' => true]);
-            
-        } catch (\Exception $e) {
-            \DB::rollBack();
-            \Log::error('Gagal update order karier: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal memperbarui urutan karier: ' . $e->getMessage()
-            ], 500);
+        // Update order berdasarkan urutan ID yang diterima
+        // Urutan pertama (indeks 0) akan menjadi yang teratas (order terbesar)
+        $totalItems = count($request->order);
+        
+        foreach ($request->order as $index => $id) {
+            // Hitung order dari yang terbesar (totalItems) ke terkecil (1)
+            $order = $totalItems - $index;
+            Karier::where('id', $id)->update(['order' => $order]);
         }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Urutan berhasil diperbarui'
+        ]);
     }
 }
