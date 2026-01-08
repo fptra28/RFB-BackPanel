@@ -9,7 +9,8 @@ class WakilPialangController extends Controller
 {
     public function index()
     {
-        $wakilpialang = WakilPialang::latest()
+        $wakilpialang = WakilPialang::orderBy('order')
+            ->orderBy('created_at', 'desc')
             ->with(['kategoriWakilPialang:id,slug,nama_kategori']) // ambil hanya field yang dibutuhkan
             ->get();
 

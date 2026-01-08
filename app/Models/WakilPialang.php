@@ -16,6 +16,11 @@ class WakilPialang extends Model
         'nomor_izin',
         'status',
         'category_id',
+        'order',
+    ];
+
+    protected $attributes = [
+        'order' => 0,
     ];
 
     /**
