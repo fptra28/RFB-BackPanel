@@ -15,7 +15,7 @@ class JfxController extends Controller
 
     public function index()
     {
-        $ProdukJFX = Jfx::orderBy('created_at', 'desc')->get();
+        $ProdukJFX = Jfx::orderBy('order', 'desc')->get(); // Urutkan berdasarkan order descending (tertinggi di atas)
         $countProduk = Jfx::count();
 
         return view('jfx.index', compact('ProdukJFX', 'countProduk'));
@@ -46,6 +46,10 @@ class JfxController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // Dapatkan order tertinggi saat ini dan tambahkan 1
+        $highestOrder = Jfx::max('order') ?? 0;
+        $newOrder = $highestOrder + 1;
+
         $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -53,8 +57,6 @@ class JfxController extends Controller
             $imageName = now()->format('dmY') . '-' . $originalName;
             $targetPath = 'img/produk/jfx';
             $image->move(public_path($targetPath), $imageName);
-
-            // Simpan path relatif
             $imagePath = 'jfx/' . $imageName;
         }
 
@@ -62,7 +64,8 @@ class JfxController extends Controller
             'name' => $request->name,
             'deskripsi' => $request->deskripsi,
             'specs' => $request->specs,
-            'image' => $imagePath,  // path: jfx/namafile.jpg
+            'image' => $imagePath,
+            'order' => $newOrder,
         ]);
 
         return redirect()->route('jfx.index')->with('success', 'Produk berhasil ditambahkan!');
@@ -114,12 +117,17 @@ class JfxController extends Controller
     public function destroy(string $id)
     {
         $produk = Jfx::findOrFail($id);
+        $deletedOrder = $produk->order;
 
         if ($produk->image && File::exists(public_path('img/produk/' . $produk->image))) {
             File::delete(public_path('img/produk/' . $produk->image));
         }
 
         $produk->delete();
+
+        // Perbarui order untuk data yang tersisa
+        Jfx::where('order', '>', $deletedOrder)
+            ->decrement('order');
 
         return redirect()->route('jfx.index')->with('success', 'Produk berhasil dihapus!');
     }
@@ -134,6 +142,7 @@ class JfxController extends Controller
             'order.*' => 'integer|exists:jfxes,id'
         ]);
 
+        // Perbarui urutan dari 1 sampai jumlah data
         foreach ($request->order as $index => $id) {
             Jfx::where('id', $id)->update(['order' => $index + 1]);
         }

@@ -160,40 +160,23 @@
         const tbody = document.getElementById('sortable-tbody');
         if (!tbody) return;
         
-        // Simpan urutan asli
-        let originalOrder = [];
-        tbody.querySelectorAll('tr').forEach(row => {
-            originalOrder.push(row.getAttribute('data-id'));
-        });
-
         // Inisialisasi SortableJS untuk seluruh baris
         const sortable = new Sortable(tbody, {
             animation: 150,
             ghostClass: 'sortable-ghost',
             chosenClass: 'sortable-chosen',
             dragClass: 'sortable-drag',
-            onStart: function() {
-                // Simpan urutan asli saat mulai drag
-                originalOrder = [];
-                tbody.querySelectorAll('tr').forEach(row => {
-                    originalOrder.push(row.getAttribute('data-id'));
-                });
-            },
             onEnd: function(evt) {
-                // Ambil semua ID dalam urutan baru
                 const newOrder = [];
-                tbody.querySelectorAll('tr').forEach((row, index) => {
-                    newOrder.push(row.getAttribute('data-id'));
-                    // Update nomor urut
-                    const noTd = row.querySelector('td:first-child');
-                    noTd.textContent = index + 1;
+                const rows = tbody.querySelectorAll('tr');
+                
+                // Update nomor urut di tampilan (1 untuk yang paling atas)
+                rows.forEach((row, index) => {
+                    // Simpan ID dalam urutan terbalik (dari bawah ke atas)
+                    newOrder.unshift(row.getAttribute('data-id'));
+                    // Update nomor urut (1 untuk yang paling atas)
+                    row.querySelector('td:first-child').textContent = index + 1;
                 });
-
-                // Cek apakah ada perubahan urutan
-                const hasChanged = JSON.stringify(originalOrder) !== JSON.stringify(newOrder);
-
-                // Hanya kirim permintaan jika ada perubahan
-                if (!hasChanged) return;
 
                 // Kirim permintaan AJAX untuk menyimpan urutan baru
                 fetch('{{ route("jfx.update-order") }}', {
@@ -201,8 +184,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
+                        'X-Requested-With': 'XMLHttpRequest'
                     },
                     body: JSON.stringify({ order: newOrder })
                 })
@@ -219,7 +201,6 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         `;
-                        // Sisipkan notifikasi sebelum card
                         const card = document.querySelector('.card');
                         card.parentNode.insertBefore(alert, card);
 

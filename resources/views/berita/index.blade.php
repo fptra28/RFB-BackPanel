@@ -29,7 +29,7 @@
 @section('main-content')
 
 @if (session('success'))
-<div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
     {{ session('success') }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -38,17 +38,20 @@
 @endif
 
 @if (session('error'))
-<div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
+<div class="alert alert-danger border-left-danger alert-dismissible fade show mb-3" role="alert">
     {{ session('error') }}
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 @endif
 
 @if (session('status'))
-<div class="alert alert-success border-left-success" role="alert">
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
     {{ session('status') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
 @endif
 
@@ -177,6 +180,39 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
+    // Auto-hide alerts after 3 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                const alertInstance = new bootstrap.Alert(alert);
+                alertInstance.close();
+            }, 3000);
+        });
+    });
+
+    // Fungsi untuk menampilkan notifikasi sukses
+    function showSuccessNotification(message) {
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
+        alert.role = 'alert';
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        `;
+        // Sisipkan notifikasi sebelum card
+        const card = document.querySelector('.card');
+        card.parentNode.insertBefore(alert, card);
+
+        // Sembunyikan notifikasi setelah 3 detik
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 3000);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const tbody = document.getElementById('sortable-tbody');
         
@@ -229,9 +265,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Tampilkan notifikasi sukses
+                        // Tampilkan notifikasi sukses di luar card
                         const alert = document.createElement('div');
-                        alert.className = 'alert alert-success alert-dismissible fade show';
+                        alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
                         alert.role = 'alert';
                         alert.innerHTML = `
                             Urutan berita berhasil diperbarui.
@@ -239,12 +275,14 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         `;
-                        document.querySelector('.card-body').insertBefore(alert, document.querySelector('.table-responsive'));
+                        // Sisipkan notifikasi sebelum card
+                        const card = document.querySelector('.card');
+                        card.parentNode.insertBefore(alert, card);
 
                         // Sembunyikan notifikasi setelah 3 detik
                         setTimeout(() => {
-                            alert.classList.remove('show');
-                            setTimeout(() => alert.remove(), 150);
+                            const bsAlert = new bootstrap.Alert(alert);
+                            bsAlert.close();
                         }, 3000);
                     }
                 })
