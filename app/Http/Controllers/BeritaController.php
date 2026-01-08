@@ -32,7 +32,7 @@ class BeritaController extends Controller
             $query->where('status', 'published');
         }
 
-        $beritaFiltered = $query->latest()->orderBy('order', 'desc')->get();
+        $beritaFiltered = $query->orderBy('order', 'desc')->get();
         $countBerita = $beritaFiltered->count();
 
         return view('berita.index', compact('beritaFiltered', 'countBerita'));
@@ -57,6 +57,10 @@ class BeritaController extends Controller
         // Menambahkan kategori ke dalam data
         $data = $request->only(['judul', 'isi', 'kategori', 'status']);
 
+        // Dapatkan order terbesar saat ini dan tambahkan 1
+        $latestOrder = Berita::max('order') ?? 0;
+        $data['order'] = $latestOrder + 1;
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $tanggal = date('Y-m-d-H-i-s');
@@ -68,7 +72,7 @@ class BeritaController extends Controller
             $data['image'] = $imageName;
         }
 
-        berita::create($data);
+        Berita::create($data);
 
         return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
@@ -141,6 +145,7 @@ class BeritaController extends Controller
     public function destroy($id)
     {
         $berita = Berita::findOrFail($id);
+        $order = $berita->order;
 
         // Hapus gambar jika ada
         if ($berita->image && File::exists(public_path('img/berita/' . $berita->image))) {
@@ -149,8 +154,11 @@ class BeritaController extends Controller
 
         $berita->delete();
 
+        // Update order untuk berita yang memiliki order lebih besar dari yang dihapus
+        Berita::where('order', '>', $order)->decrement('order');
+
         return redirect()->route('berita.index')
-            ->with('success', 'Berita berhasil dihapus!');
+            ->with('success', 'Berita berhasil dihapus! Urutan telah diperbarui.');
     }
 
     /**
@@ -163,10 +171,19 @@ class BeritaController extends Controller
             'order.*' => 'integer|exists:beritas,id'
         ]);
 
+        // Update order berdasarkan urutan ID yang diterima
+        // Urutan pertama (indeks 0) akan menjadi yang teratas (order terbesar)
+        $totalItems = count($request->order);
+        
         foreach ($request->order as $index => $id) {
-            Berita::where('id', $id)->update(['order' => $index + 1]);
+            // Hitung order dari yang terbesar (totalItems) ke terkecil (1)
+            $order = $totalItems - $index;
+            Berita::where('id', $id)->update(['order' => $order]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Urutan berhasil diperbarui'
+        ]);
     }
 }

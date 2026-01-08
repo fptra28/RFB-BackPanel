@@ -144,11 +144,19 @@ class SpaController extends Controller
             'order.*' => 'integer|exists:spas,id'
         ]);
 
-        // Perbarui urutan dari 1 sampai jumlah data
+        // Update order berdasarkan urutan ID yang diterima
+        // Urutan pertama (indeks 0) akan menjadi yang teratas (order terbesar)
+        $totalItems = count($request->order);
+        
         foreach ($request->order as $index => $id) {
-            Spa::where('id', $id)->update(['order' => $index + 1]);
+            // Hitung order dari yang terbesar (totalItems) ke terkecil (1)
+            $order = $totalItems - $index;
+            Spa::where('id', $id)->update(['order' => $order]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Urutan berhasil diperbarui'
+        ]);
     }
 }

@@ -11,7 +11,15 @@
     }
     .sortable-chosen {
         cursor: move;
+        cursor: grab;
         background-color: #f8f9fa;
+    }
+    #sortable-tbody tr {
+        cursor: move;
+        cursor: grab;
+    }
+    #sortable-tbody tr:active {
+        cursor: grabbing;
     }
     .sortable-drag {
         cursor: grabbing;
@@ -94,6 +102,13 @@
                 <a href="{{ route('berita.index') }}" class="btn btn-sm btn-danger ml-2">Reset</a>
             </div>
         </form>
+
+        @if(request('kategori') || request('status') === 'draft')
+        <div class="alert alert-info mb-3" id="filter-notification">
+            <i class="fas fa-info-circle"></i> Fitur pengurutan dinonaktifkan saat menggunakan filter.
+            <a href="{{ route('berita.index') }}" class="btn btn-sm btn-outline-secondary ml-2">Hilangkan Filter</a>
+        </div>
+        @endif
 
         <div class="table-responsive rounded overflow-hidden m-0 border shadow">
             <table class="table table-striped table-hover mb-0" width="100%" cellspacing="0" id="sortable-table">
@@ -180,54 +195,38 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-    // Auto-hide alerts after 3 seconds
     document.addEventListener('DOMContentLoaded', function() {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
+        // Auto-hide alerts after 3 seconds, except for filter notification
+        document.querySelectorAll('.alert:not(#filter-notification)').forEach(function(alert) {
             setTimeout(function() {
                 const alertInstance = new bootstrap.Alert(alert);
                 alertInstance.close();
             }, 3000);
         });
-    });
 
-    // Fungsi untuk menampilkan notifikasi sukses
-    function showSuccessNotification(message) {
-        const alert = document.createElement('div');
-        alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
-        alert.role = 'alert';
-        alert.innerHTML = `
-            ${message}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        `;
-        // Sisipkan notifikasi sebelum card
-        const card = document.querySelector('.card');
-        card.parentNode.insertBefore(alert, card);
-
-        // Sembunyikan notifikasi setelah 3 detik
-        setTimeout(() => {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        }, 3000);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
         const tbody = document.getElementById('sortable-tbody');
+        if (!tbody) return;
         
-        // Simpan urutan asli
-        let originalOrder = [];
-        tbody.querySelectorAll('tr').forEach(row => {
-            originalOrder.push(row.getAttribute('data-id'));
-        });
+        // Cek apakah ada filter aktif
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasFilter = urlParams.has('kategori') || urlParams.get('status') === 'draft';
 
-        // Inisialisasi SortableJS untuk seluruh baris
+        if (hasFilter) {
+            // Jika ada filter, nonaktifkan drag and drop
+            tbody.querySelectorAll('tr').forEach(row => {
+                row.style.cursor = 'default';
+                row.draggable = false;
+            });
+            return; // Keluar dari fungsi, tidak inisialisasi Sortable
+        }
+
+        // Inisialisasi Sortable hanya jika tidak ada filter
         const sortable = new Sortable(tbody, {
             animation: 150,
             ghostClass: 'sortable-ghost',
             chosenClass: 'sortable-chosen',
             dragClass: 'sortable-drag',
+            // Mengaktifkan drag dari mana saja di baris
             onStart: function() {
                 // Simpan urutan asli saat mulai drag
                 originalOrder = [];
@@ -265,7 +264,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Tampilkan notifikasi sukses di luar card
+                        // Tampilkan notifikasi sukses
                         const alert = document.createElement('div');
                         alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
                         alert.role = 'alert';
@@ -286,7 +285,10 @@
                         }, 3000);
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menyimpan urutan');
+                });
             }
         });
     });
