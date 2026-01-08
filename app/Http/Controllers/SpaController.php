@@ -15,7 +15,7 @@ class SpaController extends Controller
 
     public function index()
     {
-        $produkSPA = Spa::orderBy('created_at', 'desc')->get();
+        $produkSPA = Spa::orderBy('order', 'desc')->get(); // Urutkan berdasarkan order descending (tertinggi di atas)
         $countProduk = Spa::count();
 
         return view('spa.index', compact('produkSPA', 'countProduk'));
@@ -47,6 +47,10 @@ class SpaController extends Controller
         ]);
 
         $imagePath = null;
+        
+        // Dapatkan order tertinggi saat ini dan tambahkan 1
+        $highestOrder = Spa::max('order') ?? 0;
+        $newOrder = $highestOrder + 1;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -114,6 +118,7 @@ class SpaController extends Controller
     public function destroy(string $id)
     {
         $produk = Spa::findOrFail($id);
+        $deletedOrder = $produk->order;
 
         // Hapus gambar jika ada
         if ($produk->image && File::exists(public_path('img/produk/' . $produk->image))) {
@@ -121,6 +126,10 @@ class SpaController extends Controller
         }
 
         $produk->delete();
+
+        // Perbarui order untuk data yang tersisa
+        Spa::where('order', '>', $deletedOrder)
+            ->decrement('order');
 
         return redirect()->route('spa.index')->with('success', 'Produk berhasil dihapus!');
     }
@@ -135,6 +144,7 @@ class SpaController extends Controller
             'order.*' => 'integer|exists:spas,id'
         ]);
 
+        // Perbarui urutan dari 1 sampai jumlah data
         foreach ($request->order as $index => $id) {
             Spa::where('id', $id)->update(['order' => $index + 1]);
         }

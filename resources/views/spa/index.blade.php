@@ -26,6 +26,30 @@
 </style>
 @endpush
 
+@push('styles')
+<style>
+    .sortable-ghost {
+        opacity: 0.5;
+        background: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .sortable-chosen {
+        cursor: move;
+        background-color: #f8f9fa;
+    }
+    .sortable-drag {
+        cursor: grabbing;
+        background-color: #fff;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: rotate(1deg);
+    }
+    .sortable-ghost td {
+        border: 2px dashed #3490dc;
+        background: #f0f7ff;
+    }
+</style>
+@endpush
+
 @section('main-content')
 @if (session('success'))
 <div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
@@ -145,6 +169,80 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-hide alerts after 3 seconds
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                const alertInstance = new bootstrap.Alert(alert);
+                alertInstance.close();
+            }, 3000);
+        });
+
+        const tbody = document.getElementById('sortable-tbody');
+        if (!tbody) return;
+        
+        // Inisialisasi SortableJS untuk seluruh baris
+        const sortable = new Sortable(tbody, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                const newOrder = [];
+                const rows = tbody.querySelectorAll('tr');
+                
+                // Update nomor urut di tampilan (1 untuk yang paling atas)
+                rows.forEach((row, index) => {
+                    // Simpan ID dalam urutan terbalik (dari bawah ke atas)
+                    newOrder.unshift(row.getAttribute('data-id'));
+                    // Update nomor urut (1 untuk yang paling atas)
+                    row.querySelector('td:first-child').textContent = index + 1;
+                });
+
+                // Kirim permintaan AJAX untuk menyimpan urutan baru
+                fetch('{{ route("spa.update-order") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ order: newOrder })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses di luar card
+                        const alert = document.createElement('div');
+                        alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
+                        alert.role = 'alert';
+                        alert.innerHTML = `
+                            Urutan produk berhasil diperbarui.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        `;
+                        const card = document.querySelector('.card');
+                        card.parentNode.insertBefore(alert, card);
+
+                        // Sembunyikan notifikasi setelah 3 detik
+                        setTimeout(() => {
+                            const bsAlert = new bootstrap.Alert(alert);
+                            bsAlert.close();
+                        }, 3000);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    });
+</script>
+@endpush
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
