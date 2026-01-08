@@ -9,9 +9,9 @@
                     <div class="row">
                         <div class="col-lg-6 d-none d-lg-block bg-success">
                             <div class="h-100 d-flex flex-column align-items-center justify-content-center text-center">
-                                <img src="{{ asset('img/logo-rfb.png') }}" alt="Logo RFB" class="img-fluid p-4"
-                                    style="max-height: 200px; object-fit: contain;">
-                                <h2 class="mt-3 mb-0 font-weight-bold text-dark">Rifan Financindo</h2>
+                                <img src="{{ asset('favicon/favicon-96x96.png') }}" alt="Logo RFB" class="img-fluid p-4"
+                                    style="max-height: 150px; object-fit: contain;">
+                                <h2 class="mt-2 mb-0 font-weight-bold text-dark">Rifan Financindo</h2>
                                 <h5 class="mb-0 font-weight-bold text-dark">Berjangka</h5>
                             </div>
                         </div>

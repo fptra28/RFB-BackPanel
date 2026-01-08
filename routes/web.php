@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // Autentikasi tanpa register, reset, dan verify
 Auth::routes([
-    'register' => false,
+    'register' => true,
     'reset'    => false,
     'verify'   => false,
 ]);

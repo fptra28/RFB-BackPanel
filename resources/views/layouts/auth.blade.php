@@ -11,6 +11,11 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Favicon -->
+    <link href="{{ asset('favicon/favicon.ico') }}" rel="icon" type="image/x-icon">
+    <link href="{{ asset('favicon/favicon.svg') }}" rel="icon" type="image/svg+xml">
+    <link href="{{ asset('favicon/favicon-96x96.png') }}" rel="apple-touch-icon">
+
     <!-- Fonts -->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     <link
@@ -28,10 +33,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-    <!-- Favicon -->
-    <link href="{{ asset('img/favicon.png') }}" rel="icon" type="image/png">
 </head>
 
 <body class="bg-gradient-primary min-vh-100 d-flex justify-content-center align-items-center">

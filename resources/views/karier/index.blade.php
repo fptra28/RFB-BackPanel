@@ -35,6 +35,33 @@
 
 @section('main-content')
 
+@if (session('success'))
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger border-left-danger alert-dismissible fade show mb-3" role="alert">
+    {{ session('error') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+@if (session('status'))
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
+    {{ session('status') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <div class="d-flex justify-content-between align-items-center">
@@ -45,24 +72,6 @@
         </div>
     </div>
     <div class="card-body">
-        @if (session('success'))
-        <div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @endif
-
-        @if (session('error'))
-        <div class="alert alert-danger border-left-danger alert-dismissible fade show mb-3" role="alert">
-            {{ session('error') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        @endif
-
         <div class="table-responsive rounded overflow-hidden mb-0 border shadow">
             <table class="table table-striped table-hover" width="100%" cellspacing="0" id="sortable-table">
                 <thead class="thead-dark">

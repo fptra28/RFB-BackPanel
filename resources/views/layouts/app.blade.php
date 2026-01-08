@@ -9,6 +9,11 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Favicon -->
+    <link href="{{ asset('favicon/favicon.ico') }}" rel="icon" type="image/x-icon">
+    <link href="{{ asset('favicon/favicon.svg') }}" rel="icon" type="image/svg+xml">
+    <link href="{{ asset('favicon/favicon-96x96.png') }}" rel="apple-touch-icon">
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 

@@ -23,7 +23,9 @@
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
     <!-- Favicon -->
-    <link href="{{ asset('img/cover-login.png') }}" rel="icon" type="image/png">
+    <link href="{{ asset('favicon/favicon.ico') }}" rel="icon" type="image/x-icon">
+    <link href="{{ asset('favicon/favicon.svg') }}" rel="icon" type="image/svg+xml">
+    <link href="{{ asset('favicon/favicon-96x96.png') }}" rel="apple-touch-icon">
 </head>
 
 <body id="page-top">
@@ -36,7 +38,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
                 <div class="sidebar-brand-icon">
-                    <img src="{{ asset('img/logo-rfb.png') }}" alt="Logo RFB" class="img-fluid"
+                    <img src="{{ asset('favicon/favicon-96x96.png') }}" alt="Logo RFB" class="img-fluid"
                         style="width: 30px; height: auto;">
                 </div>
                 <div class="sidebar-brand-text mx-3">
