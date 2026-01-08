@@ -28,7 +28,7 @@
 
 @section('main-content')
 @if (session('success'))
-<div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
     {{ session('success') }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -37,7 +37,7 @@
 @endif
 
 @if (session('error'))
-<div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
+<div class="alert alert-danger border-left-danger alert-dismissible fade show mb-3" role="alert">
     {{ session('error') }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -46,12 +46,15 @@
 @endif
 
 @if (session('status'))
-<div class="alert alert-success border-left-success" role="alert">
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
     {{ session('status') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
 @endif
 
-<div class="card shadow mb-4">
+<div class="card shadow">
     <div class="card-header py-3">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="m-0 text-gray-800 font-weight-bold">{{ __('Produk Multilateral JFX') }}</h5>
@@ -74,9 +77,7 @@
                 <tbody id="sortable-tbody">
                     @forelse ($ProdukJFX as $index => $item)
                     <tr data-id="{{ $item->id }}">
-                        <td class="text-center align-middle">
-                            {{ $index + 1 }}
-                        </td>
+                        <td class="text-center align-middle">{{ $index + 1 }}</td>
                         <td class="align-middle">{{ $item->name }}</td>
                         <td class="align-middle" style="max-width: 350px;">
                             {{ \Illuminate\Support\Str::limit($item->deskripsi, 150) }}
@@ -147,7 +148,17 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Auto-hide alerts after 3 seconds
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                const alertInstance = new bootstrap.Alert(alert);
+                alertInstance.close();
+            }, 3000);
+        });
+
         const tbody = document.getElementById('sortable-tbody');
+        if (!tbody) return;
         
         // Simpan urutan asli
         let originalOrder = [];
@@ -198,9 +209,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Tampilkan notifikasi sukses
+                        // Tampilkan notifikasi sukses di luar card
                         const alert = document.createElement('div');
-                        alert.className = 'alert alert-success alert-dismissible fade show';
+                        alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
                         alert.role = 'alert';
                         alert.innerHTML = `
                             Urutan produk berhasil diperbarui.
@@ -208,12 +219,14 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         `;
-                        document.querySelector('.card-body').insertBefore(alert, document.querySelector('.table-responsive'));
+                        // Sisipkan notifikasi sebelum card
+                        const card = document.querySelector('.card');
+                        card.parentNode.insertBefore(alert, card);
 
                         // Sembunyikan notifikasi setelah 3 detik
                         setTimeout(() => {
-                            alert.classList.remove('show');
-                            setTimeout(() => alert.remove(), 150);
+                            const bsAlert = new bootstrap.Alert(alert);
+                            bsAlert.close();
                         }, 3000);
                     }
                 })
