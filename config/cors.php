@@ -24,10 +24,24 @@ return [
         'http://127.0.0.1:3000',
         'http://rfb-backend.test',
         'https://rfb-backend.test',
+
+        // API host
         'https://rfbdev.newsmaker.id',
         'https://api-dev.rf-berjangka.com',
-        'https://rfb-berjangka.com', 
-        'https://www.rfb-berjangka.com'
+
+        // FRONTEND DOMAIN (yang bener-bener dipakai browser lu)
+        'https://rf-berjangka.com',
+        'https://www.rf-berjangka.com',
+
+        // kalau masih ada domain versi "rfb" yang dipakai di tempat lain
+        'https://rfb-berjangka.com',
+        'https://www.rfb-berjangka.com',
+    ],
+
+     // opsional tapi recommended biar gak kejebak www/non-www
+    'allowed_origins_patterns' => [
+        '/^https:\/\/(www\.)?rf-berjangka\.com$/',
+        '/^https:\/\/(www\.)?rfb-berjangka\.com$/',
     ],
 
     'allowed_origins_patterns' => [],
@@ -38,6 +52,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => true,
+    'supports_credentials' => false,
 
 ];
