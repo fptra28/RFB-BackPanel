@@ -26,6 +26,8 @@ return [
         'https://rfb-backend.test',
         'https://rfbdev.newsmaker.id',
         'https://api-dev.rf-berjangka.com',
+        'https://rfb-berjangka.com', 
+        'https://www.rfb-berjangka.com'
     ],
 
     'allowed_origins_patterns' => [],
