@@ -100,7 +100,7 @@
                                 <label for="is_active">Status</label>
                                 <select class="form-control @error('is_active') is-invalid @enderror" id="is_active" name="is_active" required>
                                     <option value="1" {{ old('is_active', '1') == '1' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Nonaktif</option>
+                                    <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
                                 </select>
                                 @error('is_active')
                                     <span class="invalid-feedback" role="alert">
