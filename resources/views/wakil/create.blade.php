@@ -40,7 +40,7 @@
                 <label for="status">Status</label>
                 <select class="form-control" id="status" name="status" required>
                     <option value="aktif">Aktif</option>
-                    <option value="non-aktif">Tidak Aktif</option>
+                    <option value="non-aktif">Nonaktif</option>
                 </select>
             </div>
 

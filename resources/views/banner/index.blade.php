@@ -63,7 +63,7 @@
                         <td class="text-center align-middle">{{ $banner->order }}</td>
                         <td class="text-center align-middle">
                             <span class="badge {{ $banner->is_active ? 'badge-success' : 'badge-secondary' }}">
-                                {{ $banner->is_active ? 'Aktif' : 'Tidak Aktif' }}
+                                {{ $banner->is_active ? 'Aktif' : 'Nonaktif' }}
                             </span>
                         </td>
                         <td class="align-middle">

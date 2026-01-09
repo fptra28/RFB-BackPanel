@@ -61,7 +61,7 @@
                                 @if ($item->status === 'aktif')
                                 Aktif
                                 @else
-                                Tidak Aktif
+                                Nonaktif
                                 @endif
                             </span>
                         </td>

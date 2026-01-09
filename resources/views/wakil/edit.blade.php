@@ -44,7 +44,7 @@
                 <label for="status">Status</label>
                 <select class="form-control" id="status" name="status" required>
                     <option value="aktif" {{ $wakil->status === 'aktif' ? 'selected' : '' }}>Aktif</option>
-                    <option value="non-aktif" {{ $wakil->status === 'non-aktif' ? 'selected' : '' }}>Tidak Aktif
+                    <option value="non-aktif" {{ $wakil->status === 'non-aktif' ? 'selected' : '' }}>Nonaktif
                     </option>
                 </select>
             </div>

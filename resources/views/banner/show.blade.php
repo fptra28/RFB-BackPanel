@@ -87,7 +87,7 @@
                                     @method('PATCH')
                                     <button type="submit" class="btn {{ $banner->status === 'active' ? 'btn-warning' : 'btn-success' }}">
                                         <i class="fas {{ $banner->status === 'active' ? 'fa-eye-slash' : 'fa-eye' }}"></i> 
-                                        {{ $banner->status === 'active' ? 'Tidak Aktif' : 'Aktifkan' }}
+                                        {{ $banner->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
                                     </button>
                                 </form>
                             </div>
