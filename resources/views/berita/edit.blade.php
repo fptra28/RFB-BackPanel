@@ -36,7 +36,7 @@
             <div class="d-flex">
                 <div class="form-group w-100 mr-1">
                     <label for="image">Gambar</label>
-                    @if ($berita->image)
+                    @if ($berita->image && file_exists(public_path('img/berita/' . $berita->image)))
                     <!-- Menampilkan gambar yang sudah ada -->
                     <img src="{{ asset('img/berita/' . $berita->image) }}" alt="Gambar Berita" class="mt-2" width="100">
                     @endif

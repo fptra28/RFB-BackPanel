@@ -35,7 +35,7 @@
         <div class="d-flex justify-content-center align-items-center flex-column mb-3">
             <!-- Menampilkan gambar berita dengan kelas img-fluid untuk membuatnya responsif -->
             <h4 class="mt-3 font-weight-bold text-center">{{ $berita->judul }}</h4>
-            @if($berita->image)
+            @if($berita->image && file_exists(public_path('img/berita/' . $berita->image)))
             <img src="{{ asset('img/berita/' . $berita->image) }}" alt="{{ $berita->judul }}" class="img-fluid rounded"
                 style="max-height: 300px; width: auto; height: 100%;" loading="lazy">
             @endif

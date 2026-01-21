@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
@@ -64,9 +65,10 @@ class BeritaController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $tanggal = date('Y-m-d-H-i-s');
-            $judulSlug = str_replace(' ', '-', strtolower($request->judul));
-            $imageName = $tanggal . '-' . $judulSlug . '.' . $image->getClientOriginalExtension();
+            $judulSlug = Str::slug($request->judul);
+            $imageName = $tanggal . '-' . $judulSlug . '-' . Str::random(6) . '.' . $image->getClientOriginalExtension();
 
+            File::makeDirectory(public_path('img/berita'), 0755, true, true);
             $image->move(public_path('img/berita'), $imageName);
 
             $data['image'] = $imageName;
@@ -123,15 +125,16 @@ class BeritaController extends Controller
 
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
-            if ($berita->image && File::exists(public_path($berita->image))) {
-                File::delete(public_path($berita->image));
+            if ($berita->image && File::exists(public_path('img/berita/' . $berita->image))) {
+                File::delete(public_path('img/berita/' . $berita->image));
             }
 
             $image = $request->file('image');
             $tanggal = date('Y-m-d-H-i-s');
-            $judulSlug = str_replace(' ', '-', strtolower($request->judul));
-            $imageName = $tanggal . '-' . $judulSlug . '.' . $image->getClientOriginalExtension();
+            $judulSlug = Str::slug($request->judul);
+            $imageName = $tanggal . '-' . $judulSlug . '-' . Str::random(6) . '.' . $image->getClientOriginalExtension();
 
+            File::makeDirectory(public_path('img/berita'), 0755, true, true);
             $image->move(public_path('img/berita'), $imageName);
 
             $data['image'] = $imageName;

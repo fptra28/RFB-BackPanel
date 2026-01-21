@@ -37,7 +37,7 @@
                                     <th width="40%">Status</th>
                                     <td>
                                         <span class="badge {{ $banner->status === 'active' ? 'badge-success' : 'badge-secondary' }}">
-                                            {{ $banner->status === 'active' ? 'Aktif' : 'Nonaktif' }}
+                                            {{ $banner->status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
                                         </span>
                                     </td>
                                 </tr>
