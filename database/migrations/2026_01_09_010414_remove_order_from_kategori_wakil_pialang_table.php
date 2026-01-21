@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasColumn('kategori_wakil_pialang', 'order')) {
+            return;
+        }
+
         Schema::table('kategori_wakil_pialang', function (Blueprint $table) {
             $table->dropColumn('order');
         });
@@ -21,8 +25,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (Schema::hasColumn('kategori_wakil_pialang', 'order')) {
+            return;
+        }
+
         Schema::table('kategori_wakil_pialang', function (Blueprint $table) {
-            $table->integer('order')->after('nama');
+            $table->integer('order')->default(0)->after('nama_kategori');
         });
     }
 };
