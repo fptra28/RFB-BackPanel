@@ -12,6 +12,36 @@ class WakilPialangController extends Controller
     {
         $this->middleware('auth');
     }
+    
+    /**
+     * Update the order of wakil pialang
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateOrder(Request $request)
+    {
+        if ($request->ajax()) {
+            $order = $request->input('order');
+            
+            if (is_array($order)) {
+                // Hitung total item
+                $totalItems = count($order);
+                
+                // Update order dari yang terbesar ke terkecil
+                foreach ($order as $position => $id) {
+                    // Urutan teratas (indeks 0) akan dapat nilai order tertinggi
+                    // Dimulai dari totalItems (terbesar) sampai 1 (terkecil)
+                    $newOrder = $totalItems - $position;
+                    WakilPialang::where('id', $id)->update(['order' => $newOrder]);
+                }
+                
+                return response()->json(['success' => true]);
+            }
+        }
+        
+        return response()->json(['success' => false], 400);
+    }
 
     public function index($slug)
     {
@@ -19,9 +49,10 @@ class WakilPialangController extends Controller
             // Mendapatkan kategori berdasarkan slug atau akan gagal jika tidak ditemukan
             $kategori = KategoriWakilPialang::where('slug', $slug)->firstOrFail();
 
-            // Mengambil data Wakil Pialang berdasarkan kategori dan mengurutkan berdasarkan nama
+            // Mengambil data Wakil Pialang berdasarkan kategori dan mengurutkan berdasarkan order (descending) dan nama
             $wakilPialang = WakilPialang::where('category_id', $kategori->id)
-                ->orderBy('nama', 'asc') // Urutkan berdasarkan nama secara ascending
+                ->orderBy('order', 'desc')
+                ->orderBy('nama', 'asc')
                 ->get();
 
             // Mengirimkan data ke view
@@ -57,12 +88,19 @@ class WakilPialangController extends Controller
                 'status' => 'required|in:aktif,non-aktif',
             ]);
 
+            // Get the maximum order value for this category
+            $maxOrder = WakilPialang::where('category_id', $kategori->id)->max('order');
+            
+            // Jika belum ada data, mulai dari 1, jika ada tambahkan 1
+            $newOrder = $maxOrder !== null ? $maxOrder + 1 : 1;
+            
             // Menyimpan data Wakil Pialang
             WakilPialang::create([
                 'nama' => $validated['nama'],
                 'nomor_izin' => $validated['nomor_izin'],
                 'status' => $validated['status'],
                 'category_id' => $kategori->id,
+                'order' => $newOrder,
             ]);
 
             return redirect()->route('wakil.index', $slug)->with('success', 'Wakil Pialang berhasil ditambahkan.');
@@ -116,20 +154,43 @@ class WakilPialangController extends Controller
 
     public function destroy($slug, $id)
     {
-        // Menemukan Wakil Pialang berdasarkan ID dan slug kategori
-        $wakil = WakilPialang::where('id', $id)
-            ->whereHas('kategoriWakilPialang', function ($query) use ($slug) {
-                $query->where('slug', $slug);
-            })
-            ->first();
+        try {
+            // Mulai database transaction
+            \DB::beginTransaction();
 
-        if (!$wakil) {
-            return redirect()->route('wakil.index', ['slug' => $slug])->with('error', 'Data tidak ditemukan.');
+            // Temukan kategori untuk memastikan slug valid
+            $kategori = KategoriWakilPialang::where('slug', $slug)->firstOrFail();
+            
+            // Dapatkan data yang akan dihapus beserta order-nya
+            $wakil = WakilPialang::where('id', $id)
+                ->where('category_id', $kategori->id)
+                ->firstOrFail();
+            
+            $deletedOrder = $wakil->order;
+            
+            // Hapus data
+            $wakil->delete();
+            
+            // Update order untuk data yang order-nya lebih besar dari yang dihapus
+            WakilPialang::where('category_id', $kategori->id)
+                ->where('order', '>', $deletedOrder)
+                ->decrement('order');
+            
+            // Commit transaction
+            \DB::commit();
+            
+            return redirect()
+                ->route('wakil.index', ['slug' => $slug])
+                ->with('success', 'Wakil Pialang berhasil dihapus dan urutan telah diperbarui.');
+                
+        } catch (\Exception $e) {
+            // Rollback transaction jika terjadi error
+            \DB::rollBack();
+            \Log::error('Error saat menghapus wakil pialang: ' . $e->getMessage());
+            
+            return redirect()
+                ->route('wakil.index', ['slug' => $slug])
+                ->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
-
-        // Menghapus wakil pialang
-        $wakil->delete();
-
-        return redirect()->route('wakil.index', ['slug' => $slug])->with('success', 'Wakil Pialang berhasil dihapus.');
     }
 }

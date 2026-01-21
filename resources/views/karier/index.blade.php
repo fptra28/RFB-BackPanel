@@ -23,10 +23,44 @@
         border: 2px dashed #3490dc;
         background: #f0f7ff;
     }
+    #sortable-tbody tr {
+        cursor: move;
+        cursor: grab;
+    }
+    #sortable-tbody tr:active {
+        cursor: grabbing;
+    }
 </style>
 @endpush
 
 @section('main-content')
+
+@if (session('success'))
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger border-left-danger alert-dismissible fade show mb-3" role="alert">
+    {{ session('error') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+@if (session('status'))
+<div class="alert alert-success border-left-success alert-dismissible fade show mb-3" role="alert">
+    {{ session('status') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -38,27 +72,6 @@
         </div>
     </div>
     <div class="card-body">
-        <!-- Notifikasi -->
-        <div id="notification-container">
-            @if (session('success'))
-            <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            @endif
-
-            @if (session('error'))
-            <div class="alert alert-danger border-left-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            @endif
-        </div>
-
         <div class="table-responsive rounded overflow-hidden mb-0 border shadow">
             <table class="table table-striped table-hover" width="100%" cellspacing="0" id="sortable-table">
                 <thead class="thead-dark">
@@ -142,44 +155,53 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Auto-hide alerts after 3 seconds
+        document.querySelectorAll('.alert').forEach(function(alert) {
+            setTimeout(function() {
+                const alertInstance = new bootstrap.Alert(alert);
+                alertInstance.close();
+            }, 3000);
+        });
+
         const tbody = document.getElementById('sortable-tbody');
-        if (!tbody) {
-            console.error('Element with id "sortable-tbody" not found!');
-            return;
-        }
+        if (!tbody) return;
         
+        // Simpan urutan asli
+        let originalOrder = [];
+        tbody.querySelectorAll('tr').forEach(row => {
+            originalOrder.push(row.getAttribute('data-id'));
+        });
+
         // Inisialisasi SortableJS
         const sortable = new Sortable(tbody, {
             animation: 150,
-            handle: 'td', // Memungkinkan drag dari sel manapun
             ghostClass: 'sortable-ghost',
             chosenClass: 'sortable-chosen',
             dragClass: 'sortable-drag',
-            onStart: function(evt) {
-                // Tambahkan class saat mulai drag
-                evt.item.classList.add('sortable-dragging');
+            onStart: function() {
+                // Simpan urutan asli saat mulai drag
+                originalOrder = [];
+                tbody.querySelectorAll('tr').forEach(row => {
+                    originalOrder.push(row.getAttribute('data-id'));
+                });
             },
-            onEnd: function(evt) {
-                // Hapus class setelah selesai drag
-                evt.item.classList.remove('sortable-dragging');
-                
+            onEnd: function() {
                 // Ambil semua ID dalam urutan baru
                 const newOrder = [];
-                const rows = tbody.querySelectorAll('tr');
-                
-                rows.forEach((row, index) => {
-                    const id = row.getAttribute('data-id');
-                    if (id) {
-                        newOrder.push(parseInt(id));
-                        // Update nomor urut
-                        const noTd = row.querySelector('td:first-child');
-                        if (noTd) noTd.textContent = index + 1;
-                    }
+                tbody.querySelectorAll('tr').forEach((row, index) => {
+                    newOrder.push(row.getAttribute('data-id'));
+                    // Update nomor urut
+                    const noTd = row.querySelector('td:first-child');
+                    noTd.textContent = index + 1;
                 });
 
+                // Cek apakah ada perubahan urutan
+                const hasChanged = JSON.stringify(originalOrder) !== JSON.stringify(newOrder);
+
+                // Hanya kirim permintaan jika ada perubahan
+                if (!hasChanged) return;
+
                 // Kirim permintaan AJAX untuk menyimpan urutan baru
-                console.log('Mengirim permintaan update order:', newOrder);
-                
                 fetch('{{ route("karier.update-order") }}', {
                     method: 'POST',
                     headers: {
@@ -190,14 +212,29 @@
                     },
                     body: JSON.stringify({ order: newOrder })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Response dari server:', data);
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses
+                        const alert = document.createElement('div');
+                        alert.className = 'alert alert-success border-left-success alert-dismissible fade show mb-3';
+                        alert.role = 'alert';
+                        alert.innerHTML = `
+                            Urutan karier berhasil diperbarui.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        `;
+                        // Sisipkan notifikasi sebelum card
+                        const card = document.querySelector('.card');
+                        card.parentNode.insertBefore(alert, card);
+
+                        // Sembunyikan notifikasi setelah 3 detik
+                        setTimeout(() => {
+                            const bsAlert = new bootstrap.Alert(alert);
+                            bsAlert.close();
+                        }, 3000);
+                    }
                     if (data.success) {
                         // Tampilkan notifikasi sukses
                         showAlert('success', 'Urutan karier berhasil diperbarui.');
