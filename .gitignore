@@ -15,6 +15,8 @@ yarn-error.log
 
 /public/build
 /storage/pail
+/storage/logs/*.log
+/storage/logs/*.log.*
 .env.backup
 .env.production
 .phpactor.json
