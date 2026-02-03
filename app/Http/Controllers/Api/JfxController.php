@@ -8,12 +8,30 @@ use Illuminate\Http\Request;
 
 class JfxController extends Controller
 {
+    private function imageUrl($image)
+    {
+        if (!$image) {
+            return null;
+        }
+
+        if (preg_match('#^https?://#', $image)) {
+            return $image;
+        }
+
+        return asset('img/produk/' . $image);
+    }
+
     // GET /api/jfx
     public function index()
     {
         $jfxes = Jfx::orderBy('order', 'desc')
             ->latest()
             ->get();
+
+        $jfxes = $jfxes->map(function ($item) {
+            $item->image_url = $this->imageUrl($item->image);
+            return $item;
+        });
 
         return response()->json($jfxes, 200);
     }
@@ -27,6 +45,7 @@ class JfxController extends Controller
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
 
+        $jfx->image_url = $this->imageUrl($jfx->image);
         return response()->json($jfx, 200);
     }
 }
