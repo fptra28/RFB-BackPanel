@@ -17,7 +17,15 @@ class BannerController extends Controller
     public function index()
     {
         $banners = Banner::orderBy('order', 'asc')->get();
-        
+
+        $banners = $banners->map(function ($item) {
+            // Ensure image_url exists (model appends it) and keep image as full URL for compatibility
+            if (!empty($item->image_url)) {
+                $item->image = $item->image_url;
+            }
+            return $item;
+        });
+
         return response()->json($banners);
     }
 
@@ -50,11 +58,11 @@ class BannerController extends Controller
                 'is_active' => $validated['is_active']
             ]);
 
-            return response()->json([
-                'success' => true,
-                'data' => $banner,
-                'message' => 'Banner berhasil ditambahkan'
-            ], 201);
+        return response()->json([
+            'success' => true,
+            'data' => $this->withImageUrl($banner),
+            'message' => 'Banner berhasil ditambahkan'
+        ], 201);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -83,7 +91,7 @@ class BannerController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $banner,
+            'data' => $this->withImageUrl($banner),
             'message' => 'Detail banner berhasil diambil'
         ]);
     }
@@ -130,7 +138,7 @@ class BannerController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $banner,
+                'data' => $this->withImageUrl($banner),
                 'message' => 'Banner berhasil diperbarui'
             ]);
 
@@ -178,5 +186,14 @@ class BannerController extends Controller
                 'message' => 'Gagal menghapus banner: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    private function withImageUrl(Banner $banner)
+    {
+        // Model appends image_url, force image to be a full URL for compatibility
+        if (!empty($banner->image_url)) {
+            $banner->image = $banner->image_url;
+        }
+        return $banner;
     }
 }

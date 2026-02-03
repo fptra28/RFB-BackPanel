@@ -30,6 +30,8 @@ class SpaController extends Controller
 
         $spas = $spas->map(function ($item) {
             $item->image_url = $this->imageUrl($item->image);
+            // Backward compatibility: ensure image is a full URL for clients still using `image`
+            $item->image = $item->image_url;
             return $item;
         });
 
@@ -46,6 +48,8 @@ class SpaController extends Controller
         }
 
         $spa->image_url = $this->imageUrl($spa->image);
+        // Backward compatibility: ensure image is a full URL for clients still using `image`
+        $spa->image = $spa->image_url;
         return response()->json($spa, 200);
     }
 }

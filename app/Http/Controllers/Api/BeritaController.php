@@ -31,6 +31,8 @@ class BeritaController extends Controller
 
         $berita = $berita->map(function ($item) {
             $item->image_url = $this->imageUrl($item->image);
+            // Backward compatibility: ensure image is a full URL for clients still using `image`
+            $item->image = $item->image_url;
             return $item;
         });
 
@@ -47,6 +49,8 @@ class BeritaController extends Controller
         }
 
         $berita->image_url = $this->imageUrl($berita->image);
+        // Backward compatibility: ensure image is a full URL for clients still using `image`
+        $berita->image = $berita->image_url;
         return response()->json($berita, 200);
     }
 }

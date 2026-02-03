@@ -30,6 +30,8 @@ class JfxController extends Controller
 
         $jfxes = $jfxes->map(function ($item) {
             $item->image_url = $this->imageUrl($item->image);
+            // Backward compatibility: ensure image is a full URL for clients still using `image`
+            $item->image = $item->image_url;
             return $item;
         });
 
@@ -46,6 +48,8 @@ class JfxController extends Controller
         }
 
         $jfx->image_url = $this->imageUrl($jfx->image);
+        // Backward compatibility: ensure image is a full URL for clients still using `image`
+        $jfx->image = $jfx->image_url;
         return response()->json($jfx, 200);
     }
 }
