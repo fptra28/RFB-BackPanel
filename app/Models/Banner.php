@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 
 class Banner extends Model
@@ -18,4 +19,17 @@ class Banner extends Model
         'is_active' => 'boolean',
         'order' => 'integer'
     ];
+
+    protected $appends = [
+        'image_url',
+    ];
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->image);
+    }
 }
