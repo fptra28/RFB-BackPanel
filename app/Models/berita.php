@@ -26,6 +26,10 @@ class Berita extends Model
         'order' => 0,
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     // Buat slug otomatis saat membuat atau mengupdate
     protected static function boot()
     {
@@ -41,5 +45,18 @@ class Berita extends Model
         static::updating(function ($berita) {
             $berita->slug = Str::slug($berita->judul);
         });
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        if (preg_match('#^https?://#', $this->image)) {
+            return $this->image;
+        }
+
+        return asset('img/berita/' . $this->image);
     }
 }

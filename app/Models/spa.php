@@ -25,6 +25,10 @@ class Spa extends Model
         'order' => 0,
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -39,5 +43,18 @@ class Spa extends Model
         static::updating(function ($spa) {
             $spa->slug = Str::slug($spa->name);
         });
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        if (preg_match('#^https?://#', $this->image)) {
+            return $this->image;
+        }
+
+        return asset('img/produk/' . $this->image);
     }
 }
