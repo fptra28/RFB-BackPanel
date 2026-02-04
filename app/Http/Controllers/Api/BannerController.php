@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
@@ -16,7 +17,9 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $banners = Banner::orderBy('order', 'asc')->get();
+        $banners = Cache::remember('api:banners', 300, function () {
+            return Banner::orderBy('order', 'asc')->get();
+        });
         
         return response()->json($banners);
     }
@@ -49,6 +52,8 @@ class BannerController extends Controller
                 'order' => $validated['order'] ?? 0,
                 'is_active' => $validated['is_active']
             ]);
+
+        Cache::forget('api:banners');
 
         return response()->json([
             'success' => true,
@@ -128,6 +133,8 @@ class BannerController extends Controller
 
             $banner->update($validated);
 
+            Cache::forget('api:banners');
+
             return response()->json([
                 'success' => true,
                 'data' => $banner,
@@ -166,6 +173,8 @@ class BannerController extends Controller
             }
 
             $banner->delete();
+
+            Cache::forget('api:banners');
 
             return response()->json([
                 'success' => true,
