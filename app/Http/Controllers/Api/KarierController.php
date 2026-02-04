@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Karier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class KarierController extends Controller
@@ -17,9 +18,11 @@ class KarierController extends Controller
     public function index()
     {
         try {
-            $kariers = Karier::orderBy('order', 'desc')
-                ->latest()
-                ->get();
+            $kariers = Cache::remember('api:karier:index', 300, function () {
+                return Karier::orderBy('order', 'desc')
+                    ->latest()
+                    ->get();
+            });
                 
             return response()->json([
                 'success' => true,
@@ -58,6 +61,7 @@ class KarierController extends Controller
 
         try {
             $karier = Karier::create($request->all());
+            Cache::forget('api:karier:index');
             return response()->json([
                 'success' => true,
                 'message' => 'Data karier berhasil ditambahkan',
@@ -81,7 +85,9 @@ class KarierController extends Controller
     public function show($id)
     {
         try {
-            $karier = Karier::findOrFail($id);
+            $karier = Cache::remember('api:karier:' . $id, 300, function () use ($id) {
+                return Karier::findOrFail($id);
+            });
             return response()->json([
                 'success' => true,
                 'message' => 'Detail data karier berhasil diambil',
@@ -105,7 +111,9 @@ class KarierController extends Controller
     public function showBySlug($slug)
     {
         try {
-            $karier = Karier::where('slug', $slug)->firstOrFail();
+            $karier = Cache::remember('api:karier:slug:' . $slug, 300, function () use ($slug) {
+                return Karier::where('slug', $slug)->firstOrFail();
+            });
             return response()->json([
                 'success' => true,
                 'message' => 'Detail data karier berhasil diambil',
@@ -144,7 +152,17 @@ class KarierController extends Controller
 
         try {
             $karier = Karier::findOrFail($id);
+            $oldSlug = $karier->slug;
             $karier->update($request->all());
+
+            Cache::forget('api:karier:index');
+            Cache::forget('api:karier:' . $karier->id);
+            if (!empty($oldSlug)) {
+                Cache::forget('api:karier:slug:' . $oldSlug);
+            }
+            if (!empty($karier->slug)) {
+                Cache::forget('api:karier:slug:' . $karier->slug);
+            }
             
             return response()->json([
                 'success' => true,
@@ -170,8 +188,13 @@ class KarierController extends Controller
     {
         try {
             $karier = Karier::findOrFail($id);
+            Cache::forget('api:karier:' . $karier->id);
+            if (!empty($karier->slug)) {
+                Cache::forget('api:karier:slug:' . $karier->slug);
+            }
             $karier->delete();
             
+            Cache::forget('api:karier:index');
             return response()->json([
                 'success' => true,
                 'message' => 'Data karier berhasil dihapus'
