@@ -48,7 +48,7 @@ class BeritaController extends Controller
     {
         // Menambahkan validasi untuk kategori
         $request->validate([
-            'judul' => 'required|string|max:100',
+            'judul' => 'required|string|max:150',
             'isi' => 'required|string',
             'kategori' => 'required|in:Info & Kegiatan,Pengumuman',
             'status' => 'required|in:draft,published',
@@ -113,7 +113,7 @@ class BeritaController extends Controller
 
         // Menambahkan validasi untuk kategori
         $request->validate([
-            'judul' => 'required|string|max:100',
+            'judul' => 'required|string|max:150',
             'isi' => 'required|string',
             'kategori' => 'required|in:Info & Kegiatan,Pengumuman',
             'status' => 'required|in:draft,published',

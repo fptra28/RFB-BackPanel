@@ -55,7 +55,7 @@
             
             <div class="form-group">
                 <label for="responsibilities">Responsibilities:</label>
-                <textarea class="form-control @error('responsibilities') is-invalid @enderror" 
+                <textarea class="form-control @error('responsibilities') is-invalid @enderror tinymce-editor" 
                           id="responsibilities" name="responsibilities" rows="8">{{ old('responsibilities', $karier->responsibilities) }}</textarea>
                 @error('responsibilities')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -64,7 +64,7 @@
             
             <div class="form-group">
                 <label for="qualifications">Qualifications:</label>
-                <textarea class="form-control @error('qualifications') is-invalid @enderror" 
+                <textarea class="form-control @error('qualifications') is-invalid @enderror tinymce-editor" 
                           id="qualifications" name="qualifications" rows="8">{{ old('qualifications', $karier->qualifications) }}</textarea>
                 @error('qualifications')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -80,25 +80,67 @@
 </div>
 
 @push('scripts')
-<script src="https://cdn.tiny.cloud/1/zxbb8ss6iclrki0fopl5gcne91neckqc4e004atop3wf0mi2/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        tinymce.init({
-            selector: '#responsibilities, #qualifications',
-            height: 300,
-            plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons',
-            toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview save print | insertfile image media template link anchor codesample | ltr rtl',
-            menubar: 'file edit view insert format tools table help',
-            toolbar_mode: 'sliding',
-            content_style: 'body { font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }',
-            setup: function(editor) {
-                editor.on('change', function() {
-                    editor.save();
+<script src="https://cdn.tiny.cloud/1/rijrac2uxn06a1q296snq7j1fi420fd29r3lc1o12yzq6fwv/tinymce/8/tinymce.min.js"
+        referrerpolicy="origin" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+                                tinymce.init({
+                    selector: '.tinymce-editor',
+                    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                    content_style: 'img{max-width:100%;height:auto;}',
+                    image_class_list: [
+                        { title: 'Responsive', value: 'img-fluid' },
+                    ],
+                    setup: (editor) => {
+                        const sync = () => editor.save();
+                        editor.on('change input undo redo', sync);
+                    },
+                    images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
+                    
+                        xhr.open('POST', '{{ route('tinymce.upload') }}');
+                        xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                        xhr.withCredentials = true;
+                    
+                        xhr.upload.onprogress = (e) => {
+                            progress(e.loaded / e.total * 100);
+                        };
+                    
+                        xhr.onload = () => {
+                            if (xhr.status !== 200) {
+                                reject('HTTP Error: ' + xhr.status);
+                                return;
+                            }
+                    
+                            let json;
+                            try {
+                                json = JSON.parse(xhr.responseText);
+                            } catch (e) {
+                                reject('Invalid JSON: ' + xhr.responseText);
+                                return;
+                            }
+                    
+                            if (!json || typeof json.location !== 'string') {
+                                reject('Invalid response: ' + xhr.responseText);
+                                return;
+                            }
+                    
+                            resolve(json.location);
+                        };
+                    
+                        xhr.onerror = () => {
+                            reject('Image upload failed due to a network error.');
+                        };
+                    
+                        const formData = new FormData();
+                        formData.append('file', blobInfo.blob(), blobInfo.filename());
+                        xhr.send(formData);
+                    }),
                 });
-            }
-        });
-    });
-</script>
+            });
+        </script>
 @endpush
 
 @endsection

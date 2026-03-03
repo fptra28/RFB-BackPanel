@@ -6,6 +6,7 @@ use App\Http\Controllers\JfxController;
 use App\Http\Controllers\KategoriWakilPialangController;
 use App\Http\Controllers\ProfileWebsiteController;
 use App\Http\Controllers\SpaController;
+use App\Http\Controllers\TinymceController;
 use App\Http\Controllers\WakilPialangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
@@ -24,6 +25,11 @@ Auth::routes([
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+// TinyMCE upload
+Route::post('/tinymce/upload', [TinymceController::class, 'upload'])
+    ->middleware('auth')
+    ->name('tinymce.upload');
 
 // Produk JFX
 Route::prefix('produk/jfx')->name('jfx.')->group(function () {
